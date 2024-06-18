@@ -19,6 +19,6 @@ List* createList();
 void destroyList(List* list);
 void addToList(List* list, void* address);
 int removeToListByAddress(List* list, const void* address);
-void* removeToList(List* list, const int index)
+void* removeToList(List* list, const int index);
 
 #endif //BSUTILS_H
