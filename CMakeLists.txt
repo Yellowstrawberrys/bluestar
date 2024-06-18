@@ -33,6 +33,8 @@ add_executable(smallbluestar main.c
         bsutils.c
         bsutils.h
         physics.h
+        entity/player.c
+        entity/player.h
 )
 target_link_libraries(smallbluestar raylib)
 

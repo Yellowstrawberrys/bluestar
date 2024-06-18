@@ -18,6 +18,6 @@ typedef struct _physicsObject {
 
 void updatePhysics();
 PhysicsObject* generatePhysicsObject();
-void unregisterPhysicsObject(PhysicsObject* object);
+void unregisterPhysicsObject(const PhysicsObject* object);
 
 #endif //PHYSICS_H
