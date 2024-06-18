@@ -7,5 +7,6 @@ typedef struct _staticObject {
 } StaticObject;
 
 int collideMap(Vector2* vec);
+int renderMap();
 
 #endif //MAP_H
