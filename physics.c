@@ -10,7 +10,7 @@
 
 typedef struct _physicsObject {
     int id;
-    Vector2 coordinate, force;
+    Vector2 coordinate;
     int facing;
 
     void (*onCollide)(struct _physicsObject*);
@@ -29,7 +29,7 @@ void update() {
     float delta = GetFrameTime();
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
-        if(doesCollideWithMap(((PhysicsObject*) (node->address))->coordinate)) {
+        if(doesCollideWithMap(&((PhysicsObject*) (node->address))->coordinate)) {
 
         }
         node = node->next;
