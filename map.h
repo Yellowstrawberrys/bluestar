@@ -6,8 +6,6 @@ typedef struct _staticObject {
     int material;
 } StaticObject;
 
-int doesCollideWithMap(Vector2 vec) {
-
-}
+int doesCollideWithMap(Vector2 vec);
 
 #endif //MAP_H
