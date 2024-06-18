@@ -8,3 +8,7 @@
 
 List* mapObjects = createList();
 
+int collideMap(Vector2* vec){
+
+    return 0;
+}
