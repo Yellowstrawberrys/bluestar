@@ -28,6 +28,7 @@ endif()
 #include_directories("/opt/homebrew/Cellar/raylib/5.0/include")
 add_executable(smallbluestar main.c
         map.c
+        map.h
         physics.c
         bsutils.c
         bsutils.h

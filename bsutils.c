@@ -15,7 +15,7 @@ void destroyList(List* list) {
     free(list);
 }
 
-void addToList(List* list, int address) {
+void addToList(List* list, void* address) {
     LNode* toAdd = malloc(sizeof(LNode)); // B - LNode (1)
     toAdd->address = address;
     toAdd->next = NULL;
@@ -31,7 +31,7 @@ void addToList(List* list, int address) {
     }
 }
 
-int removeToListByAddress(List* list, int address) {
+int removeToListByAddress(List* list, const void* address) {
     LNode* bef = NULL;
     LNode* node = list->head;
     for(int i=0; i<list->size; i++) {
@@ -48,7 +48,7 @@ int removeToListByAddress(List* list, int address) {
     return -1;
 }
 
-int removeToList(List* list, int index) {
+void* removeToList(List* list, int index) {
     LNode* bef = NULL;
     LNode* node = list->head;
     if(list->size < index) return -1;
@@ -58,7 +58,7 @@ int removeToList(List* list, int index) {
     }
     if(!bef) list->head = node->next;
     else bef->next = node->next;
-    const int ad = node->address;
+    const void* ad = node->address;
     list->size--;
     free(node); // R - LNode (1)
     return ad;

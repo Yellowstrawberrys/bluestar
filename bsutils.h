@@ -6,7 +6,7 @@
 #define BSUTILS_H
 
 typedef struct _lnode {
-    int address;
+    void* address;
     struct _lnode *next;
 } LNode;
 

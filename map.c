@@ -3,10 +3,8 @@
 //
 
 #include <raylib.h>
+#include "map.h"
+#include "bsutils.h"
 
-void drawMap();
+List* mapObjects = createList();
 
-
-void drawMap() {
-
-}
