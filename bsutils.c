@@ -48,10 +48,10 @@ int removeToListByAddress(List* list, const void* address) {
     return -1;
 }
 
-void* removeToList(List* list, int index) {
+void* removeToList(List* list, const int index) {
     LNode* bef = NULL;
     LNode* node = list->head;
-    if(list->size < index) return -1;
+    if(list->size < index) return NULL;
     for(int i=0; i<index-1; i++) {
         bef = node;
         node = node->next;
