@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "bsutils.h"
 #include "raylib.h"
+#include "map.h"
 
 #define GRAVITY 9.81
 
@@ -28,7 +29,9 @@ void update() {
     float delta = GetFrameTime();
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
-        ((PhysicsObject*) (node->address))->dx;
+        if(doesCollideWithMap(((PhysicsObject*) (node->address))->coordinate)) {
+
+        }
         node = node->next;
     }
 }
