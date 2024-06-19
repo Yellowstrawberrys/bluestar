@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Tilemaps/Tilemap_Assets/tilesets/Ground.tsx",
+    "expandedProjectPaths": [
+        "Tilemaps/Tilemap_Assets",
+        ".",
+        "Tilemaps",
+        "levels",
+        "Tilemaps/Tilemap_Assets/tilesets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "Tilemaps/Tilemap_Assets/tilesets/Ground.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        },
+        "levels/tutorial_level.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1010.6666666666666,
+                "y": 298.66666666666663
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/konod/OneDrive/문서/UnityProjects/bluestar/Assets/Tilemaps/Tilemap_Assets/tileset_asset",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 60,
+    "openFiles": [
+        "levels/tutorial_level.tmx",
+        "Tilemaps/Tilemap_Assets/tilesets/Ground.tsx"
+    ],
+    "project": "tilemap.tiled-project",
+    "recentFiles": [
+        "levels/tutorial_level.tmx",
+        "Tilemaps/Tilemap_Assets/tilesets/Ground.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}

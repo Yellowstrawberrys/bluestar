@@ -5,6 +5,11 @@ cmake-build-debug
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/codeStyleConfig.xml
+.idea/**/editor.xml
+raylib.h
+raymath.h
+.vscode
 
 # AWS User-specific
 .idea/**/vsc.xml

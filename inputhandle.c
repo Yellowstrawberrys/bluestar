@@ -5,6 +5,7 @@
 #include "inputhandle.h"
 #include "raylib.h"
 #include "string.h"
+#include "player.h"
 
 void clearBuffer();
 
@@ -13,20 +14,20 @@ int coolTime = 0;
 int buffI = 0;
 char inputBuff[4];
 
-void handleInput() {
+void handleInput(Player *player, float delta) { //adding player struct and deltatime
     if(coolTime < 0) {
         clearBuffer();
     }else coolTime--;
 
     // TODO: Movements
     if(IsKeyDown(KEY_W)) {
-
+        player -> speed = -PLAYER_JUMP_SPD; player -> canJump = false;
     }else if(IsKeyDown(KEY_D)) {
-
+        player -> position.x += PLAYER_HOR_SPD * delta;
     }else if(IsKeyDown(KEY_A)) {
-
+        player -> position.x -= PLAYER_HOR_SPD * delta;
     }else if(IsKeyDown(KEY_S)) {
-
+        
     }
 
     char c = GetCharPressed();
