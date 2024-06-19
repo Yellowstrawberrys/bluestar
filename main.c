@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "inputhandle.h"
+#include "player.h"
 
 typedef enum _state {
 
@@ -10,6 +11,7 @@ int main(void) {
     InitWindow(640, 480, "푸른별");
     InitAudioDevice();
     while (!WindowShouldClose()) {
+        float deltaTime = GetFrameTime();
         handleInput();
 
         BeginDrawing();
