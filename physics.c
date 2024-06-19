@@ -5,27 +5,13 @@
 #include "bsutils.h"
 #include "raylib.h"
 #include "map.h"
+#include "physics.h"
 
 #define GRAVITY 9.81
 
-typedef struct _physicsObject {
-    int id;
-    Vector2 coordinate, force;
-    int facing;
-
-    void (*onCollide)(struct _physicsObject*);
-
-    float weight;
-} PhysicsObject;
-
-void update();
-PhysicsObject* generatePhysicsObject();
-void unregisterPhysicsObject(PhysicsObject* object);
-
-
 List* physicsObjects = createList();
 
-void update() {
+void updatePhysics() {
     const float delta = GetFrameTime();
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
@@ -47,5 +33,11 @@ void update() {
 }
 
 PhysicsObject* generatePhysicsObject() {
-    return malloc(sizeof(PhysicsObject));
+    PhysicsObject* p = malloc(sizeof(PhysicsObject));
+    addToList(physicsObjects, p);
+    return p;
+}
+
+void unregisterPhysicsObject(const PhysicsObject* object) {
+    removeToListByAddress(physicsObjects, object);
 }
