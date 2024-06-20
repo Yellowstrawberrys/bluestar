@@ -54,6 +54,6 @@ void handleInput(Player *player, float delta) { //adding player struct and delta
 }
 
 void clearBuffer() {
-    for(int i=0;i<4;i++) inputBuff[i] = '';
+    for(int i=0;i<4;i++) inputBuff[i] = '\0';
     buffI = 0;
 }
