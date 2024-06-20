@@ -38,6 +38,8 @@ add_executable(smallbluestar main.c
         inputhandle.c
         animation.c
         animation.h
+        player.c
+        player.h
 )
 target_link_libraries(smallbluestar raylib)
 

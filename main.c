@@ -12,7 +12,7 @@ int main(void) {
     InitAudioDevice();
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
-        handleInput();
+        // handleInput();
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
