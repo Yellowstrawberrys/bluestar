@@ -18,7 +18,7 @@ typedef struct _list {
 List* createList();
 void destroyList(List* list);
 void addToList(List* list, void* address);
-int removeToListByAddress(List* list, const void* address);
-void* removeToList(List* list, const int index);
+int removeFromListByAddress(List* list, const void* address);
+void* removeFromList(List* list, const int index);
 
 #endif //BSUTILS_H
