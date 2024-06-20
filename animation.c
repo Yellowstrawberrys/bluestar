@@ -14,9 +14,13 @@ List* sprites = createList();
 void animateSprite() {
     const LNode* node = sprites->head;
     for (int i=0; i<sprites->size-1; i++) {
-        const AnimatedSprite* as = node->address;
+        AnimatedSprite* as = node->address;
 
         DrawTextureRec(*as->texture, *as->range, *as->coordinate, WHITE);
+        as->range->x = as->range->x * as->current;
+
+        if(as->current < as->count) as->current++;
+        else as->current = 0;
 
         node = node->next;
     }
