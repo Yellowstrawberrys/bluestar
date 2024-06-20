@@ -3,11 +3,14 @@
 //
 
 #include "bsutils.h"
-
 #include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
 
-static List* createList() {
+
+List* createList() {
     List* list = (List*)malloc(sizeof(List));
+    list->head = NULL;
     return list;
 }
 
@@ -19,16 +22,16 @@ void addToList(List* list, void* address) {
     LNode* toAdd = malloc(sizeof(LNode)); // B - LNode (1)
     toAdd->address = address;
     toAdd->next = NULL;
-    if(!list->head) {
-        list->head = toAdd;
-        list->size++;
-    }else {
+    if(list->head) {
         LNode* node = list->head;
-        for(int i=0; i<list->size; i++) {
+        for(int i=0; i<list->size-1; i++) {
             node = node->next;
         }
         node->next = toAdd;
+    }else {
+        list->head = toAdd;
     }
+    list->size++;
 }
 
 int removeFromListByAddress(List* list, const void* address) {
