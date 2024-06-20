@@ -8,8 +8,13 @@
 
 #include "bsutils.h"
 
-List* sprites = createList();
+List* sprites;
 int frameCount = 0;
+
+int init() {
+    sprites = createList();
+    return 1;
+}
 
 void animateSprite() {
     const LNode* node = sprites->head;

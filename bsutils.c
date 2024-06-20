@@ -6,7 +6,7 @@
 
 #include <stdlib.h>
 
-List* createList() {
+static List* createList() {
     List* list = (List*)malloc(sizeof(List));
     return list;
 }
@@ -58,7 +58,7 @@ void* removeFromList(List* list, const int index) {
     }
     if(!bef) list->head = node->next;
     else bef->next = node->next;
-    const void* ad = node->address;
+    void* ad = node->address;
     list->size--;
     free(node); // R - LNode (1)
     return ad;

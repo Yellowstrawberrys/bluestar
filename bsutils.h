@@ -15,7 +15,7 @@ typedef struct _list {
     int size;
 } List;
 
-List* createList();
+static List* createList();
 void destroyList(List* list);
 void addToList(List* list, void* address);
 int removeFromListByAddress(List* list, const void* address);

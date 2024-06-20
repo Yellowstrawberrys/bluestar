@@ -7,7 +7,6 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#endif //PLAYER_H
 
 #define G 400
 #define PLAYER_JUMP_SPD 350.0f
@@ -15,7 +14,7 @@
 #define PLAYER_MAX_HP 100.0f
 #define PLAYER_MAX_MANA 200.0f
 
-typedef struct Player {
+typedef struct _player {
     Vector2 position;
     float speed;
     float hp;
@@ -32,3 +31,4 @@ int summonPlayer(Player *player, float delta);
 int UpdatePlayer(Player *player, float delta);
 int UpdateCameraCenter(Camera2D *camera, Player *player, float delta, int width, int height);
 
+#endif //PLAYER_H
