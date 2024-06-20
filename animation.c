@@ -15,6 +15,7 @@ void animateSprite() {
     const LNode* node = sprites->head;
     for (int i=0; i<sprites->size-1; i++) {
         AnimatedSprite* as = node->address;
+        if(as->count == 0) continue;
 
         DrawTextureRec(*as->texture, *as->range, *as->coordinate, WHITE);
         as->range->x = as->range->x * as->current;
