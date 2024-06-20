@@ -39,5 +39,5 @@ PhysicsObject* generatePhysicsObject() {
 }
 
 void unregisterPhysicsObject(const PhysicsObject* object) {
-    removeToListByAddress(physicsObjects, object);
+    removeFromListByAddress(physicsObjects, object);
 }

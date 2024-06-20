@@ -31,7 +31,7 @@ void addToList(List* list, void* address) {
     }
 }
 
-int removeToListByAddress(List* list, const void* address) {
+int removeFromListByAddress(List* list, const void* address) {
     LNode* bef = NULL;
     LNode* node = list->head;
     for(int i=0; i<list->size; i++) {
@@ -48,7 +48,7 @@ int removeToListByAddress(List* list, const void* address) {
     return -1;
 }
 
-void* removeToList(List* list, const int index) {
+void* removeFromList(List* list, const int index) {
     LNode* bef = NULL;
     LNode* node = list->head;
     if(list->size < index) return NULL;
