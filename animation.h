@@ -10,11 +10,12 @@ typedef struct _animatedSprite {
     Texture2D* texture;
     Rectangle* range;
     Vector2* coordinate;
-    int count, fps, current;
+    int pause, count, fps, current;
 } AnimatedSprite;
 
+int initAnimationSprites();
 void animateSprite();
 AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vector2* coordinate, int count, int fps);
-void destroyAnimatedSprite(const AnimatedSprite* sprite);
+void destroyAnimatedSprite(AnimatedSprite* sprite);
 
 #endif //ANIMATION_H
