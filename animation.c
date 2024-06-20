@@ -9,7 +9,7 @@
 #include "bsutils.h"
 
 List* sprites = createList();
-
+int frameCount = 0;
 
 void animateSprite() {
     const LNode* node = sprites->head;
@@ -20,23 +20,28 @@ void animateSprite() {
         DrawTextureRec(*as->texture, *as->range, *as->coordinate, WHITE);
         as->range->x = as->range->x * as->current;
 
-        if(as->current < as->count) as->current++;
-        else as->current = 0;
+        if(frameCount%(60/as->fps)==0) {
+            if(as->current < as->count) as->current++;
+            else as->current = 0;
+        }
+
 
         node = node->next;
     }
+    frameCount++;
 }
 
 
 
 AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vector2* coordinate, int count, int fps) {
-    AnimatedSprite* sprite = malloc(sizeof AnimatedSprite);
+    AnimatedSprite* sprite = malloc(sizeof (AnimatedSprite));
     sprite->texture = texture;
     sprite->range = range;
     sprite->coordinate = coordinate;
     sprite->count = count;
     sprite->fps = fps;
     sprite->current = 0;
+    addToList(sprites, sprite);
     return sprite;
 }
 
