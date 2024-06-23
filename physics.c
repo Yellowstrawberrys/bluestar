@@ -9,7 +9,12 @@
 
 #define GRAVITY 9.81
 
-List* physicsObjects = createList();
+List* physicsObjects;
+
+int init() {
+    physicsObjects = createList();
+    return 1;
+}
 
 void updatePhysics() {
     const float delta = GetFrameTime();
@@ -39,5 +44,5 @@ PhysicsObject* generatePhysicsObject() {
 }
 
 void unregisterPhysicsObject(const PhysicsObject* object) {
-    removeToListByAddress(physicsObjects, object);
+    removeFromListByAddress(physicsObjects, object);
 }

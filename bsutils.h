@@ -4,21 +4,22 @@
 
 #ifndef BSUTILS_H
 #define BSUTILS_H
+#include <stddef.h>
 
 typedef struct _lnode {
     void* address;
-    struct _lnode *next;
+    struct _lnode* next;
 } LNode;
 
 typedef struct _list {
-    LNode *head;
+    LNode* head;
     int size;
 } List;
 
 List* createList();
 void destroyList(List* list);
 void addToList(List* list, void* address);
-int removeToListByAddress(List* list, const void* address);
-void* removeToList(List* list, const int index);
+int removeFromListByAddress(List* list, const void* address);
+void* removeFromList(List* list, const int index);
 
 #endif //BSUTILS_H
