@@ -6,6 +6,8 @@
 #include <raylib.h>
 #include "map.h"
 #include "bsutils.h"
+#include "tmx_/include/tmx.h"
+#include "tmx_/raytmx.h"
 
 // List* mapObjects = createList();
 
@@ -16,3 +18,23 @@
 //     }
 // }
 //c++ 코드 보고있었음
+
+void initMap(int argc, char *argv[], tmx_map** map){
+    ChangeDirectory(GetDirectoryPath(argv[0]));
+    *map = LoadTMX(argc > 1 ? argv[1] : "Assets/levels/tutorial_level.tmx");
+}
+
+void loadMap(tmx_map* map, const int Width, const int Height){
+    BeginDrawing();{
+        ClearBackground(RAYWHITE);
+        DrawTMX(map, Width, Height, WHITE);
+        DrawFPS(10, 10);
+    }
+    EndDrawing();
+}
+
+void unLoadMap(tmx_map* map){
+    if(map != NULL){
+        tmx_map_free(map);
+    }
+}
