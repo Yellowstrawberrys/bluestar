@@ -9,7 +9,7 @@
 #define SCREENWIDTH 1920
 #define SCREENHEIGHT 1080
 
-int main(void) {
+int main(int argc, char *argv[]) {
     SetTargetFPS(60);
     InitWindow(640, 480, "푸른별");
     InitAudioDevice();
@@ -19,6 +19,7 @@ int main(void) {
     initAnimationSprites();
     AnimatedSprite* sprite = generateAnimatedSprite(&scarfy, &frameRec, &position, 6, 20);
   
+    tmx_map* map = NULL;
     initMap(argc, argv, &map);
 
     if(map == NULL){ //eRRoR
