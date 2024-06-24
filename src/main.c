@@ -2,6 +2,7 @@
 
 #include "animation.h"
 #include "inputhandle.h"
+#include "physics.h"
 #include "player.h"
 
 int main(void) {
@@ -12,10 +13,12 @@ int main(void) {
     Vector2 position = { 350.0f, 280.0f };
     Rectangle frameRec = { 0.0f, 0.0f, (float)scarfy.width/6, (float)scarfy.height };
     initAnimationSprites();
+    const PhysicsObject* o = generatePhysicsObject(&position, 5.0f);
     AnimatedSprite* sprite = generateAnimatedSprite(&scarfy, &frameRec, &position, 6, 20);
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         // handleInput();
+        updatePhysics();
 
         BeginDrawing();
         animateSprite();
@@ -24,6 +27,7 @@ int main(void) {
         EndDrawing();
     }
     destroyAnimatedSprite(sprite);
+    unregisterPhysicsObject(o);
     return 0;
 }
 

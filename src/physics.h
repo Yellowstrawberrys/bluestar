@@ -8,7 +8,7 @@
 
 typedef struct _physicsObject {
     int id;
-    Vector2 coordinate, force;
+    Vector2* coordinate, force;
     int facing;
 
     void (*onCollide)(struct _physicsObject*);
@@ -17,7 +17,7 @@ typedef struct _physicsObject {
 } PhysicsObject;
 
 void updatePhysics();
-PhysicsObject* generatePhysicsObject();
+PhysicsObject* generatePhysicsObject(Vector2* coord, const float weight);
 void unregisterPhysicsObject(const PhysicsObject* object);
 
 #endif //PHYSICS_H
