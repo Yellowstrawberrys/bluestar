@@ -5,9 +5,11 @@
 #pragma once
 #include <raylib.h>
 #include "map.h"
+
+#include <raylib-tmx.h>
+
 #include "bsutils.h"
-#include "tmx_/include/tmx.h"
-#include "tmx_/raytmx.h"
+#include "tmx.h"
 
 // List* mapObjects = createList();
 

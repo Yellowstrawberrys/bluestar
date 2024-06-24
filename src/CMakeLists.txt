@@ -25,13 +25,29 @@ if (NOT tmx_FOUND)
     include(FetchContent)
     FetchContent_Declare(
             tmx
-            GIT_REPOSITORY https://github.com/RobLoach/tmx.git
-            GIT_TAG f88a433
+            GIT_REPOSITORY https://github.com/baylej/tmx.git
+            GIT_TAG 11ffdcd
     )
     FetchContent_GetProperties(tmx)
     if (NOT tmx_POPULATED)
         set(FETCHCONTENT_QUIET NO)
         FetchContent_Populate(tmx)
         add_subdirectory(${tmx_SOURCE_DIR} ${tmx_BINARY_DIR})
+    endif()
+endif()
+
+find_package(raylib-tmx QUIET)
+if (NOT raylib-tmx_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+            raylib-tmx
+            GIT_REPOSITORY https://github.com/RobLoach/raylib-tmx.git
+            GIT_TAG 45a2a16
+    )
+    FetchContent_GetProperties(raylib-tmx)
+    if (NOT raylib-tmx_POPULATED)
+        set(FETCHCONTENT_QUIET NO)
+        FetchContent_Populate(raylib-tmx)
+        add_subdirectory(${raylib-tmx_SOURCE_DIR} ${raylib-tmx_BINARY_DIR})
     endif()
 endif()

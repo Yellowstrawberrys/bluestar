@@ -22,7 +22,7 @@ add_executable(smallbluestar src/main.c
         src/animation.h
 )
 
-target_link_libraries(smallbluestar raylib tmx)
+target_link_libraries(smallbluestar raylib tmx raylib-tmx)
 
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit")
