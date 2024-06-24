@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <stddef.h>
 
 #include "animation.h"
 #include "inputhandle.h"
