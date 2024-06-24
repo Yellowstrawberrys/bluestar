@@ -18,14 +18,14 @@ int main(void) {
     Rectangle frameRec = { 0.0f, 0.0f, (float)scarfy.width/6, (float)scarfy.height };
     initAnimationSprites();
     AnimatedSprite* sprite = generateAnimatedSprite(&scarfy, &frameRec, &position, 6, 20);
-  
+
     initMap(argc, argv, &map);
 
     if(map == NULL){ //eRRoR
         CloseWindow();
         return -1;
     }
-  
+
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         loadMap(map, SCREENWIDTH, SCREENHEIGHT);
