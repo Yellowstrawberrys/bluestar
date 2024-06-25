@@ -2,14 +2,12 @@
 // Created by 정은수 on 2024. 6. 13..
 //
 #include <stdlib.h>
-#include <math.h>
-#include "bsutils.h"
 #include "raylib.h"
-#include "raymath.h"
-#include "map.h"
 #include "physics.h"
 
 #include <stdio.h>
+
+#include "utils/bsutils.h"
 
 #define GRAVITY 9.81
 

@@ -8,7 +8,7 @@
 
 #include <raylib-tmx.h>
 
-#include "bsutils.h"
+#include "utils/bsutils.h"
 #include "tmx.h"
 
 // List* mapObjects = createList();

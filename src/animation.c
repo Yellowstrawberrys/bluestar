@@ -6,8 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "bsutils.h"
+#include "utils/bsutils.h"
 
 List* sprites;
 int frameCount = 0;
@@ -22,7 +21,7 @@ void animateSprite() {
 
     do {
         AnimatedSprite* as = node->address;
-        DrawTextureRec(*as->texture, *as->range, *as->coordinate, WHITE);
+        DrawTextureRec(*as->texture, *as->range, (Vector2) {as->coordinate->x-as->range->width/2, as->coordinate->y-as->range->height/2}, WHITE);
         if(as->count == 0 || as->pause) continue;
 
         if(frameCount%as->fps==0) {
