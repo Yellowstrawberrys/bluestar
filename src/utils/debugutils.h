@@ -4,5 +4,8 @@
 
 #ifndef DEBUGUTILS_H
 #define DEBUGUTILS_H
+#include "physics.h"
+
+void drawPhysicsRect(const PhysicsObject* o, Color color);
 
 #endif //DEBUGUTILS_H

@@ -7,6 +7,13 @@
 #include <stddef.h>
 #include <stdio.h>
 
+int imin(const int a, const int b) {
+    return a<b?a:b;
+}
+
+int imax(const int a, const int b) {
+    return a>b?a:b;
+}
 
 List* createList() {
     List* list = (List*)malloc(sizeof(List));

@@ -64,16 +64,16 @@ add_executable(smallbluestar src/main.c
         src/map.c
         src/map.h
         src/physics.c
-        src/bsutils.c
-        src/bsutils.h
+        src/utils/bsutils.c
+        src/utils/bsutils.h
         src/physics.h
         src/inputhandle.c
         src/inputhandle.h
         src/inputhandle.c
         src/animation.c
         src/animation.h
-        src/debugutils.c
-        src/debugutils.h
+        src/utils/debugutils.c
+        src/utils/debugutils.h
 )
 
 target_link_libraries(smallbluestar raylib tmx raylib-tmx)
