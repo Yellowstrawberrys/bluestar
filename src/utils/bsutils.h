@@ -21,6 +21,7 @@ void destroyList(List* list);
 void addToList(List* list, void* address);
 int removeFromListByAddress(List* list, const void* address);
 void* removeFromList(List* list, const int index);
+void clearListWithValues(List* list);
 int imin(const int a, const int b);
 int imax(const int a, const int b);
 

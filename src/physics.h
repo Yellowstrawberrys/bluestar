@@ -21,5 +21,6 @@ int initPhysics();
 void updatePhysics(const float* delta);
 PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int height, const float weight);
 void unregisterPhysicsObject(const PhysicsObject* object);
+void destroyPhysicsObjects();
 
 #endif //PHYSICS_H

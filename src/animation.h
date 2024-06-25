@@ -17,5 +17,6 @@ int initAnimationSprites();
 void animateSprite();
 AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vector2* coordinate, int count, int fps);
 void destroyAnimatedSprite(AnimatedSprite* sprite);
+void destroyAnimatedSprites();
 
 #endif //ANIMATION_H

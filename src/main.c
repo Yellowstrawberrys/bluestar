@@ -2,8 +2,10 @@
 #include <stdio.h>
 
 #include "animation.h"
+#include "inputhandle.h"
 #include "utils/debugutils.h"
 #include "physics.h"
+#include "player.h"
 
 #define SCREENWIDTH 1920
 #define SCREENHEIGHT 1080
@@ -16,19 +18,12 @@ void collideTest(struct _physicsObject* o) {
 
 int main(int argc, char *argv[]) {
     SetTargetFPS(60);
-    InitWindow(640, 480, "푸른별");
+    InitWindow(1920/2, 1080/2, "푸른별");
     InitAudioDevice();
-    Texture2D scarfy = LoadTexture("../Assets/scarfy.png");        // Texture loading
-    Vector2 position = { 350.0f, 200.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, (float)scarfy.width/6, (float)scarfy.height };
     initAnimationSprites();
     initPhysics();
-    AnimatedSprite* sprite = generateAnimatedSprite(&scarfy, &frameRec, &position, 6, 20);
-    PhysicsObject* ph = generatePhysicsObject(&position, 30, 60, 10.0f);
-    Vector2 ab = { 350.0f, 200.0f };
-    PhysicsObject* a = generatePhysicsObject(&ab, 5, 60, 10.0f);
-    a->onCollide = collideTest;
-    printf("%p\n", a->onCollide);
+
+    initPlayer(LoadTexture("../Assets/scarfy.png"));
     // tmx_map* map = NULL;
     // initMap(argc, argv, &map);
 
@@ -40,25 +35,19 @@ int main(int argc, char *argv[]) {
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
         // loadMap(map, SCREENWIDTH, SCREENHEIGHT);
-        // handleInput();
-        if(IsKeyDown(KEY_D)) {
-            ph->force.x += 2;
-        }
-        if(IsKeyDown(KEY_A)) {
-            ph->force.x -= 2;
-        }
+        handleInput();
         updatePhysics(&delta);
 
         BeginDrawing();
         animateSprite();
-        drawPhysicsRect(a, RED);
-        drawPhysicsRect(ph, RED);
-        // DrawCircle(ph->pos->x, ph->pos->y, 5, RED);
-        ClearBackground(RAYWHITE);
+        drawPhysicsRect(getPlayerPhysicsObject(), RED);
         DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        ClearBackground(RAYWHITE);
         EndDrawing();
     }
-    destroyAnimatedSprite(sprite);
+    destroyPlayer();
+    destroyAnimatedSprites();
+    destroyPhysicsObjects();
     // unLoadMap(map);
     CloseWindow();
     return 0;

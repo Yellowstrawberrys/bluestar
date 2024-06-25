@@ -53,3 +53,7 @@ void destroyAnimatedSprite(AnimatedSprite* sprite) {
     removeFromListByAddress(sprites, sprite);
     free(sprite);
 }
+
+void destroyAnimatedSprites() {
+    clearListWithValues(sprites);
+}

@@ -73,3 +73,13 @@ void* removeFromList(List* list, const int index) {
     free(node); // R - LNode (1)
     return ad;
 }
+
+void clearListWithValues(List* list) {
+    LNode* node = list->head;
+    while (node) {
+        free(node->address);
+        node = node->next;
+        free(node); // R - LNode (1)
+    }
+    free(list);
+}

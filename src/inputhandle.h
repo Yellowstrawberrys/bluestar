@@ -4,8 +4,7 @@
 
 #ifndef INPUTHANDLE_H
 #define INPUTHANDLE_H
-#include "player.h"
 
-void handleInput(Player *player, float delta) ;
+void handleInput();
 
 #endif //INPUTHANDLE_H

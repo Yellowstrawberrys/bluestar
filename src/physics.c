@@ -89,3 +89,7 @@ PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int he
 void unregisterPhysicsObject(const PhysicsObject* object) {
     removeFromListByAddress(physicsObjects, object);
 }
+
+void destroyPhysicsObjects() {
+    clearListWithValues(physicsObjects);
+}
