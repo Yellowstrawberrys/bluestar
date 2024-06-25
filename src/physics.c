@@ -26,7 +26,7 @@ void updatePhysics(const float *delta) {
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
         PhysicsObject* p = ((PhysicsObject*) node->address);
-        // p->force.y += GRAVITY;
+        if(p->pos->y < 300) p->force.y = (GRAVITY*p->weight**delta)+p->force.y;
         if(p->force.x > 0) {
             p->force.x = imax(p->force.x-p->weight**delta, 0);
         }else if(p->force.x < 0) {
@@ -43,7 +43,11 @@ void updatePhysics(const float *delta) {
         // }
 
         p->pos->x += p->force.x;
-        p->pos->y += p->force.y;
+        p->pos->y = imin(p->pos->y+p->force.y, 300);
+        if(p->pos->y==300) p->force.y = 0;
+        if(p->onPhysicsUpdate) {
+            p->onPhysicsUpdate((Vector2) {p->force.x, p->force.y});
+        }
 
         collideCheck(p);
         node = node->next;
@@ -56,8 +60,6 @@ void collideCheck(const PhysicsObject* o) {
         for(int i = 0; i < physicsObjects->size; i++) {
             if(node->address == o) continue;
             PhysicsObject* p = ((PhysicsObject*) node->address);
-            float const asy = p->pos->y-p->height/2, aey= p->pos->y+p->height/2;
-            float const bsy = o->pos->y-o->height/2, bey= o->pos->y+o->height/2;
 
             if(
             //      start X (p)           end X (o)             start X (o)          end X (p)
@@ -79,7 +81,7 @@ PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int he
     p->height = height;
     p->force.x = 0;
     p->force.y = 0;
-    p->facing = 0;
+    p->facing = 1;
     p->type = 0;
     p->weight = weight;
     addToList(physicsObjects, p);

@@ -6,5 +6,7 @@
 #define INPUTHANDLE_H
 
 void handleInput();
+int isInputBuffEmpty();
+char* getInputBuff();
 
 #endif //INPUTHANDLE_H

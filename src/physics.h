@@ -13,6 +13,7 @@ typedef struct _physicsObject {
     int facing, type;
 
     void (*onCollide)(struct _physicsObject*);
+    void (*onPhysicsUpdate)(Vector2);
 
     float weight;
 } PhysicsObject;

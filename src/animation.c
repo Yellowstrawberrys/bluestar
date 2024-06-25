@@ -4,6 +4,7 @@
 
 #include "animation.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "utils/bsutils.h"
@@ -21,11 +22,15 @@ void animateSprite() {
 
     do {
         AnimatedSprite* as = node->address;
-        DrawTextureRec(*as->texture, *as->range, (Vector2) {as->coordinate->x-as->range->width/2, as->coordinate->y-as->range->height/2}, WHITE);
-        if(as->count == 0 || as->pause) continue;
+        as->range->x = as->range->width * as->current;
+        as->range->width = fabsf(as->range->width)*as->flipMod;
+        DrawTexturePro(*as->texture, *as->range,
+            (Rectangle) {as->coordinate->x, as->coordinate->y, as->range->width*as->flipMod, as->range->height},
+            (Vector2) {as->range->width/2*as->flipMod, as->range->height/2}, 0, WHITE
+        );
+        if(as->count == 0 || as->pause) {node = node->next;continue;}
 
         if(frameCount%as->fps==0) {
-            as->range->x = as->range->width * as->current;
             if(as->current < as->count-1) as->current++;
             else as->current = 0;
         }
@@ -45,6 +50,7 @@ AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vec
     sprite->count = count;
     sprite->fps = 60/fps;
     sprite->current = 0;
+    sprite->flipMod = 1;
     addToList(sprites, sprite);
     return sprite;
 }

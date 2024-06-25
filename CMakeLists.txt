@@ -74,8 +74,12 @@ add_executable(smallbluestar src/main.c
         src/animation.h
         src/utils/debugutils.c
         src/utils/debugutils.h
-        src/player.h
-        src/player.c
+        src/entity/player.h
+        src/entity/player.c
+        src/entity/magic.c
+        src/entity/magic.h
+        src/entity/enemy.c
+        src/entity/enemy.h
 )
 
 target_link_libraries(smallbluestar raylib tmx raylib-tmx)
