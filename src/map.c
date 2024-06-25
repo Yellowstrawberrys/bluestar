@@ -23,7 +23,7 @@
 
 void initMap(int argc, char *argv[], tmx_map** map){
     ChangeDirectory(GetDirectoryPath(argv[0]));
-    *map = LoadTMX(argc > 1 ? argv[1] : "Assets/levels/tutorial_level.tmx");
+    *map = LoadTMX(argc > 1 ? argv[1] : "../Assets/levels/tutorial_level.tmx");
 }
 
 void loadMap(tmx_map* map, const int Width, const int Height){
