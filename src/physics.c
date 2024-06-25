@@ -2,24 +2,38 @@
 // Created by 정은수 on 2024. 6. 13..
 //
 #include <stdlib.h>
+#include <math.h>
 #include "bsutils.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "map.h"
 #include "physics.h"
 
+#include <stdio.h>
+
 #define GRAVITY 9.81
+
+
+void collideCheck(const PhysicsObject* o);
+
 
 List* physicsObjects;
 
-int init() {
+int initPhysics() {
     physicsObjects = createList();
     return 1;
 }
 
-void updatePhysics() {
-    const float delta = GetFrameTime();
+void updatePhysics(const float *delta) {
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
+        PhysicsObject* p = ((PhysicsObject*) node->address);
+        // p->force.y += GRAVITY;
+        if(p->force.x > 0) {
+            p->force.x = imax(p->force.x-p->weight**delta, 0);
+        }else if(p->force.x < 0) {
+            p->force.x = imin(p->force.x+p->weight**delta, 0);
+        }
         // 0 -> 안부디침
         // 1 -> X
         // 2 -> Y
@@ -30,19 +44,45 @@ void updatePhysics() {
         //     default: break;
         // }
 
-        ((PhysicsObject*) node->address)->coordinate->x += ((PhysicsObject*) node->address)->force.x*delta;
-        ((PhysicsObject*) node->address)->coordinate->y += ((PhysicsObject*) node->address)->force.y*delta;
+        p->pos->x += p->force.x;
+        p->pos->y += p->force.y;
 
+        collideCheck(p);
         node = node->next;
     }
 }
 
-PhysicsObject* generatePhysicsObject(Vector2* coord, const float weight) {
+void collideCheck(const PhysicsObject* o) {
+    if(o->onCollide) { //?
+        const LNode* node = physicsObjects->head;
+        for(int i = 0; i < physicsObjects->size; i++) {
+            if(node->address == o) continue;
+            PhysicsObject* p = ((PhysicsObject*) node->address);
+            float const asy = p->pos->y-p->height/2, aey= p->pos->y+p->height/2;
+            float const bsy = o->pos->y-o->height/2, bey= o->pos->y+o->height/2;
+
+            if(
+            //      start X (p)           end X (o)             start X (o)          end X (p)
+                p->pos->x-p->width <= o->pos->x+o->width && o->pos->x-o->width <= p->pos->x+p->width &&
+                p->pos->y-p->height <= o->pos->y+o->height && o->pos->y-o->height <= p->pos->y+p->height
+            ) {
+                printf("collide\n");
+                o->onCollide(p);
+            }
+            node = node->next;
+        }
+    }
+}
+
+PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int height, const float weight) {
     PhysicsObject* p = malloc(sizeof(PhysicsObject));
-    p->coordinate = coord;
+    p->pos = pos;
+    p->width = width;
+    p->height = height;
     p->force.x = 0;
     p->force.y = 0;
     p->facing = 0;
+    p->type = 0;
     p->weight = weight;
     addToList(physicsObjects, p);
     return p;
