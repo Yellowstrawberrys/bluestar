@@ -5,9 +5,11 @@
 #pragma once
 #include <raylib.h>
 #include "map.h"
+
+#include <raylib-tmx.h>
+#include <tmx.h>
+
 #include "bsutils.h"
-#include "tmx_/include/tmx.h"
-#include "tmx_/raytmx.h"
 
 // List* mapObjects = createList();
 
@@ -21,7 +23,7 @@
 
 void initMap(int argc, char *argv[], tmx_map** map){
     ChangeDirectory(GetDirectoryPath(argv[0]));
-    *map = LoadTMX(argc > 1 ? argv[1] : "Assets/levels/tutorial_level.tmx");
+    *map = LoadTMX(argc > 1 ? argv[1] : "../Assets/levels/tutorial_level.tmx");
 }
 
 void loadMap(tmx_map* map, const int Width, const int Height){
