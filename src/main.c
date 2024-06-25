@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "animation.h"
-#include "debugutils.h"
+#include "utils/debugutils.h"
 #include "physics.h"
 
 #define SCREENWIDTH 1920

@@ -4,7 +4,8 @@
 
 #ifndef DEBUGUTILS_H
 #define DEBUGUTILS_H
-#include "physics.h"
+#include "../physics.h"
+#include "raylib.h"
 
 void drawPhysicsRect(const PhysicsObject* o, Color color);
 

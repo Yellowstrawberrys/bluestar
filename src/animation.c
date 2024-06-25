@@ -6,8 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "bsutils.h"
+#include "utils/bsutils.h"
 
 List* sprites;
 int frameCount = 0;
