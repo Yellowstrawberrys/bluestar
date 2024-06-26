@@ -42,3 +42,6 @@ void addCameraOffset(const Vector2 vec) {
     force.x += vec.x;
     force.y += vec.y;
 }
+
+
+//TODO debug physics, charactor modeling (animations (idle, run, attack, jump(hopefuly)), charactor size, most important -> maintance camera ( follows player but doesn't go out of map)

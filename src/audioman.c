@@ -3,6 +3,9 @@
 //
 
 #include "audioman.h"
+#include <raylib.h>
+
+Sound audios[10];
 
 void loadAudios() {
     audios[0] = LoadSound("../Assets/audio/failed.wav");
@@ -13,7 +16,7 @@ void loadAudios() {
     audios[5] = LoadSound("../Assets/audio/heal.wav");
 }
 
-void playAudio(int index) {
+void playAudio(const int index) {
     PlaySound(audios[index]);
 }
 

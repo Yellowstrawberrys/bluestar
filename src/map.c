@@ -2,7 +2,6 @@
 // Created by 정은수 on 2024. 6. 13..
 //
 
-#pragma once
 #include <raylib.h>
 #include "map.h"
 

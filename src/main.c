@@ -15,6 +15,7 @@
 // #include "map.h"
 
 #define TUTORIAL_PATH "../Assets/levels/tutorial_level.tmx"
+#define LEVEL_ONE_PATH "../Assets/levels/level_one.tmx"
 
 #define SCREENWIDTH 1920/2
 #define SCREENHEIGHT 1080/2
@@ -28,11 +29,8 @@ void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
 void drawInputEffect();
 void drawPlayerStat();
 
-// Frame buffer into which the map is rendered
 RenderTexture2D mapFrameBuffer;
 
-#define SCREENWIDTH 1920
-#define SCREENHEIGHT 1080
 
 int a = 0;
 
@@ -50,24 +48,16 @@ int main(int argc, char *argv[]) {
 
     initPlayer(&texture);
     loadAudios();
-    // tmx_map* map = NULL;
-    // initMap(argc, argv, &map);
-
-    // if(map == NULL){ //eRRoR
-    //     CloseWindow();
-    //     return -1;
-    // }
-
+    tmx_map* map = NULL;
 
     Enemy* e = spawnEnemy();
     Camera2D* cam = initCamera();
-    RenderTmxMapToFramebuf(TUTORIAL_PATH, &mapFrameBuffer);
+    RenderTmxMapToFramebuf(LEVEL_ONE_PATH, &mapFrameBuffer);
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
-        // loadMap(map, SCREENWIDTH, SCREENHEIGHT);
         tickPlayer();
         handleInput();
-        updatePhysics(&delta);
+        // updatePhysics(&delta);
         updateCamera(getPlayerPhysicsObject());
 
         BeginDrawing();
@@ -80,8 +70,7 @@ int main(int argc, char *argv[]) {
                 );
                 animateSprite();
                 drawMagic();
-                drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
-                DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+                // drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
                 ClearBackground(RAYWHITE);
             EndMode2D();
             drawInputEffect();
@@ -95,7 +84,6 @@ int main(int argc, char *argv[]) {
     destroyMagics();
     unloadAudios();
     UnloadRenderTexture(mapFrameBuffer);
-    // unLoadMap(map);
     CloseWindow();
     return 0;
 }

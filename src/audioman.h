@@ -4,9 +4,10 @@
 
 #ifndef AUDIOMAN_H
 #define AUDIOMAN_H
+
 #include "raylib.h"
 
-Sound audios[10];
+extern Sound audios[10];  // extern으로 선언
 
 void loadAudios();
 void playAudio(int index);
