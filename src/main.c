@@ -4,29 +4,43 @@
 
 #include "animation.h"
 #include "inputhandle.h"
+#include "maps/map.h"
+#include "maps/MapCollision.h"
+#include "maps/TmxCollisionMapper.h"
 #include "utils/debugutils.h"
 #include "physics.h"
 #include "entity/magic.h"
 #include "entity/player.h"
 #include "tmx.h"
-// #include "map.h"
 
 #define TUTORIAL_PATH "../Assets/levels/tutorial_level.tmx"
 
+<<<<<<< Updated upstream
+=======
+#define SCREENWIDTH 1920/2
+#define SCREENHEIGHT 1080/2
+#define TILEWIDTH 32
+#define TILEHEIGHT 32
+
+void initDrawInputEffect();
+>>>>>>> Stashed changes
 
 Texture2D *LoadMapTexture(const char *fileName);
 
 void UnloadMapTexture(Texture2D *tex);
 void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
 void drawInputEffect();
-void drawPlayerStat();
+void drawPlayerStat(Player player);
 
 // Frame buffer into which the map is rendered
 RenderTexture2D mapFrameBuffer;
 
+<<<<<<< Updated upstream
 #define SCREENWIDTH 1920
 #define SCREENHEIGHT 1080
 
+=======
+>>>>>>> Stashed changes
 int a = 0;
 
 void collideTest(struct _physicsObject* o) {
@@ -35,14 +49,30 @@ void collideTest(struct _physicsObject* o) {
 
 int main(int argc, char *argv[]) {
     SetTargetFPS(60);
+<<<<<<< Updated upstream
     InitWindow(1920/2, 1080/2, "푸른별");
+=======
+    InitWindow(SCREENWIDTH, SCREENHEIGHT, "푸른별");
+    Player player;
+>>>>>>> Stashed changes
     InitAudioDevice();
     initAnimationSprites();
     initPhysics();
     initMagics();
+<<<<<<< Updated upstream
+=======
+    initDrawInputEffect();
+    // initEnemy();
+    //
+    Texture2D texture = LoadTexture("../Assets/walk.png");
+    tmx_resource_manager* rm = tmx_make_resource_manager();
+>>>>>>> Stashed changes
 
-    Texture2D texture = LoadTexture("../Assets/scarfy.png");
+    initPlayer(&texture, &player);
+    // loadAudios();
+    tmx_map* map = LoadTMX(LEVEL_ONE_PATH);
 
+<<<<<<< Updated upstream
     initPlayer(&texture);
     // tmx_map* map = NULL;
     // initMap(argc, argv, &map);
@@ -83,6 +113,36 @@ int main(int argc, char *argv[]) {
         EndDrawing();
         }
     destroyPlayer();
+=======
+    // Enemy* e = spawnEnemy();
+    Camera2D* cam = initCamera();
+    RenderTmxMapToFramebuf(LEVEL_ONE_PATH, &mapFrameBuffer);
+    while (!WindowShouldClose()) {
+        float delta = GetFrameTime();
+        tickPlayer(&player);
+        handleInput();
+        // updatePhysics(&delta);
+        updateCamera(getPlayerPhysicsObject(player));
+
+        BeginDrawing();
+            BeginMode2D(*cam);
+                DrawTextureRec(
+                  mapFrameBuffer.texture,
+                  (Rectangle){0, 0, mapFrameBuffer.texture.width, -mapFrameBuffer.texture.height},
+                  (Vector2){0.0, 0.0},
+                  WHITE
+                );
+                animateSprite();
+                drawMagic();
+                // drawPhysicsRect(getPlayerPhysicsObject(player), BLUE);
+                ClearBackground(RAYWHITE);
+            EndMode2D();
+            drawInputEffect();
+            drawPlayerStat(player);
+        EndDrawing();
+    }
+    destroyPlayer(&player);
+>>>>>>> Stashed changes
     destroyAnimatedSprites();
     destroyPhysicsObjects();
     destroyMagics();
@@ -99,7 +159,7 @@ void drawInputEffect(){
     }
 }
 
-void drawPlayerStat() {
-    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(), getPlayerMana()), 0, 0, 20, BLACK);
-    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject()->pos->x, getPlayerPhysicsObject()->pos->y), 0, 20, 20, BLACK);
+void drawPlayerStat(Player player) {
+    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(player), getPlayerMana(player)), 0, 0, 20, BLACK);
+    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject(player)->pos->x, getPlayerPhysicsObject(player)->pos->y), 0, 20, 20, BLACK);
 }

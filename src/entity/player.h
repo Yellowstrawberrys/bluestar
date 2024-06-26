@@ -13,17 +13,26 @@
 #define PLAYER_MAX_HP 100.0f
 #define PLAYER_MAX_MANA 200.0f
 
-void tickPlayer();
-void initPlayer(Texture2D* texture);
-void jumpPlayer();
-void movePlayer(const int modifier);
-void destroyPlayer();
-int getPlayerHealth();
-int getPlayerMana();
-void heal(const int i);
-int useMana(const int i);
-void shootMagic(int type);
-PhysicsObject* getPlayerPhysicsObject();
-AnimatedSprite* getPlayerSprite();
+typedef struct{
+    Vector2 pos;
+    PhysicsObject* physics;
+    AnimatedSprite* sprite;
+    Rectangle* frameRec;
+    int health, mana;
+    int canJump, f;
+} Player;
+
+void tickPlayer(Player* player);
+void initPlayer(Texture2D* texture, Player* player);
+void jumpPlayer(Player* player);
+void movePlayer(const int modifier, Player* player);
+void destroyPlayer(Player* player);
+int getPlayerHealth(Player player);
+int getPlayerMana(Player player);
+void heal(const int i, Player* player);
+int useMana(const int i, Player* player);
+void shootMagic(int type, Player player);
+PhysicsObject* getPlayerPhysicsObject(Player player);
+AnimatedSprite* getPlayerSprite(Player player);
 
 #endif //PLAYER_H
