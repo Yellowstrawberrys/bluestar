@@ -1,48 +1,59 @@
-#include <raylib.h>
+#include <stdlib.h>
 
-#include "animation.h"
-#include "inputhandle.h"
-#include "player.h"
-#include "map.h"
-#include "tmx_/raytmx.h"
+#include "raylib.h"
+#include "tmx.h"
+// #include "map.h"
 
-#define SCREENWIDTH 1920
-#define SCREENHEIGHT 1080
+#define TUTORIAL_PATH "../Assets/levels/tutorial_level.tmx"
 
-int main(int argc, char *argv[]) {
-    SetTargetFPS(60);
-    InitWindow(640, 480, "푸른별");
-    InitAudioDevice();
-    Texture2D scarfy = LoadTexture("../Assets/scarfy.png");        // Texture loading
-    Vector2 position = { 350.0f, 280.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, (float)scarfy.width/6, (float)scarfy.height };
-    initAnimationSprites();
-    AnimatedSprite* sprite = generateAnimatedSprite(&scarfy, &frameRec, &position, 6, 20);
 
-    // initMap(argc, argv, &map);
-    tmx_map* map = NULL;
-    initMap(argc, argv, &map);
+Texture2D *LoadMapTexture(const char *fileName);
 
-    if(map == NULL){ //eRRoR
-        CloseWindow();
-        return -1;
-    }
-  
-    while (!WindowShouldClose()) {
-        float deltaTime = GetFrameTime();
-        loadMap(map, SCREENWIDTH, SCREENHEIGHT);
-        // handleInput();
+void UnloadMapTexture(Texture2D *tex);
 
+void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
+
+// Frame buffer into which the map is rendered
+RenderTexture2D mapFrameBuffer;
+
+int main()
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    int screenWidth = 1920;
+    int screenHeight = 1080;
+    Vector2 player;     // This player doesn't have a box or a sprite. It's just a point.
+    Camera2D camera;
+
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera");
+    // Load Tiled TMX map and render it to the frame buffer
+    RenderTmxMapToFramebuf(TUTORIAL_PATH, &mapFrameBuffer);
+
+    player.x = screenWidth / 2;
+    player.y = screenHeight / 2;
+    camera.target = (Vector2){ player.x, player.y };
+    camera.offset = (Vector2){ 1920, 1080 };
+    camera.rotation = 0.0;
+    camera.zoom = 1.0;
+
+
+    while (!WindowShouldClose())
+    {
+        camera.target = (Vector2){ player.x, player.y };
         BeginDrawing();
-        animateSprite();
-        ClearBackground(RAYWHITE);
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+            ClearBackground(RAYWHITE);
+
+            BeginMode2D(camera);
+                DrawTextureRec(
+                    mapFrameBuffer.texture,
+                    (Rectangle){0, 0, mapFrameBuffer.texture.width, -mapFrameBuffer.texture.height},
+                    (Vector2){0.0, 0.0},
+                    WHITE);
+            EndMode2D();
         EndDrawing();
     }
-    destroyAnimatedSprite(sprite);
-    unLoadMap(map);
+
+    UnloadRenderTexture(mapFrameBuffer);
     CloseWindow();
     return 0;
 }
-
-
