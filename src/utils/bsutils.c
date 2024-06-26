@@ -22,6 +22,12 @@ List* createList() {
 }
 
 void destroyList(List* list) {
+    LNode* node = list->head;
+    while (node) {
+        LNode* next = node->next;
+        free(node); // R - LNode (1)
+        node = next;
+    }
     free(list);
 }
 
@@ -74,6 +80,9 @@ void* removeFromList(List* list, const int index) {
     return ad;
 }
 
+/**
+ * @deprecated 램 누수
+ */
 void clearListWithValues(List* list) {
     LNode* node = list->head;
     while (node) {

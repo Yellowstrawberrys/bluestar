@@ -80,6 +80,10 @@ add_executable(smallbluestar src/main.c
         src/entity/magic.h
         src/entity/enemy.c
         src/entity/enemy.h
+        src/audioman.c
+        src/audioman.h
+        src/cameraman.c
+        src/cameraman.h
 )
 
 target_link_libraries(smallbluestar raylib tmx raylib-tmx)

@@ -12,7 +12,7 @@
 #define GRAVITY 9.81
 
 
-void collideCheck(const PhysicsObject* o);
+void collideCheck(PhysicsObject* o);
 
 
 List* physicsObjects;
@@ -54,7 +54,7 @@ void updatePhysics(const float *delta) {
     }
 }
 
-void collideCheck(const PhysicsObject* o) {
+void collideCheck(PhysicsObject* o) {
     if(o->onCollide) { //?
         const LNode* node = physicsObjects->head;
         for(int i = 0; i < physicsObjects->size; i++) {
@@ -67,7 +67,7 @@ void collideCheck(const PhysicsObject* o) {
                 p->pos->y-p->height <= o->pos->y+o->height && o->pos->y-o->height <= p->pos->y+p->height
             ) {
                 printf("collide\n");
-                o->onCollide(p);
+                o->onCollide(o, p);
             }
             node = node->next;
         }
@@ -75,7 +75,7 @@ void collideCheck(const PhysicsObject* o) {
 }
 
 PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int height, const float weight) {
-    PhysicsObject* p = malloc(sizeof(PhysicsObject));
+    PhysicsObject* p = malloc(sizeof(PhysicsObject)); // B - PhysicsObject (1)
     p->pos = pos;
     p->width = width;
     p->height = height;
@@ -88,10 +88,17 @@ PhysicsObject* generatePhysicsObject(Vector2* pos, const int width, const int he
     return p;
 }
 
-void unregisterPhysicsObject(const PhysicsObject* object) {
+void unregisterPhysicsObject(PhysicsObject* object) {
     removeFromListByAddress(physicsObjects, object);
+    free(object); // R - PhysicsObject (1)
 }
 
 void destroyPhysicsObjects() {
-    clearListWithValues(physicsObjects);
+    LNode* node = physicsObjects->head;
+    while (node) {
+        PhysicsObject* physics = (PhysicsObject*) node->address;
+        free(physics); // R - PhysicsObject (1)
+        node = node->next;
+    }
+    destroyList(physicsObjects);
 }

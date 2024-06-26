@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 
+#include "audioman.h"
 #include "raylib.h"
 #include "string.h"
 #include "entity/player.h"
@@ -22,15 +23,12 @@ void handleInput() { //adding player struct and deltatime
         clearBuffer();
     }else coolTime--;
 
-    // TODO: Movements
     if(IsKeyPressed(KEY_W)) {
         jumpPlayer();
     }else if(IsKeyDown(KEY_D)) {
         movePlayer(1);
     }else if(IsKeyDown(KEY_A)) {
         movePlayer(-1);
-    }else if(IsKeyDown(KEY_S)) {
-        // TODO: Fucked
     }
 
     char c = GetCharPressed();
@@ -41,19 +39,21 @@ void handleInput() { //adding player struct and deltatime
 
     if(IsKeyPressed(KEY_SPACE)) {
         printf("%s\n", inputBuff);
-        if(strcasecmp(inputBuff, "IIKK")==0) {
-            if(useMana(150)) heal(50);
+        if(strcasecmp(inputBuff, "IIKK")==0 && useMana(150)) {
+            heal(50);
+            playAudio(5);
         }else if(strcasecmp(inputBuff, "JJLL")==0) {
             // TODO: Damage with {mana} damage
-        }else if(strcasecmp(inputBuff, "JLJL")==0) {
-            // TODO: Normal Attack & -5 mana
-            if(useMana(5)) shootMagic(0);
-        }else if(strcasecmp(inputBuff, "KLJK")==0) {
-            // TODO: Arrange Damage & -70
+        }else if(strcasecmp(inputBuff, "JLJL")==0&&useMana(5)) {
+            shootMagic(0);
+            playAudio(1);
+        }else if(strcasecmp(inputBuff, "KLJK")==0 && useMana(70)) {
+            shootMagic(1);
+            playAudio(2);
         }else if(strcasecmp(inputBuff, "JILk")==0) {
             // TODO: Round Damage ~3m & -100
         }else {
-            // TODO: 'Failed' Sound effect
+            playAudio(0);
         }
         clearBuffer();
     }

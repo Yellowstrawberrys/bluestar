@@ -4,5 +4,18 @@
 
 #ifndef ENEMY_H
 #define ENEMY_H
+#include "../animation.h"
+#include "../physics.h"
+
+typedef struct _enemy {
+    AnimatedSprite* sprite;
+    PhysicsObject* physics;
+    int health;
+} Enemy;
+
+void initEnemy();
+Enemy* spawnEnemy();
+void damageEnemy(const PhysicsObject* o, const int amount);
+void destroyEnemies();
 
 #endif //ENEMY_H

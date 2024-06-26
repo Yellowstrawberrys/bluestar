@@ -2,35 +2,38 @@
 #include <stdio.h>
 
 #include "animation.h"
+#include "audioman.h"
+#include "cameraman.h"
 #include "inputhandle.h"
 #include "utils/debugutils.h"
 #include "physics.h"
+#include "entity/enemy.h"
 #include "entity/magic.h"
 #include "entity/player.h"
 
-#define SCREENWIDTH 1920
-#define SCREENHEIGHT 1080
+#define SCREENWIDTH 1920/2
+#define SCREENHEIGHT 1080/2
 
+void initDrawInputEffect();
 void drawInputEffect();
 void drawPlayerStat();
 
 int a =0 ;
 
-void collideTest(struct _physicsObject* o) {
-    printf("collide count: %d\n", ++a);
-}
-
 int main(int argc, char *argv[]) {
     SetTargetFPS(60);
-    InitWindow(1920/2, 1080/2, "푸른별");
+    InitWindow(SCREENWIDTH, SCREENHEIGHT, "푸른별");
     InitAudioDevice();
     initAnimationSprites();
     initPhysics();
     initMagics();
+    initDrawInputEffect();
+    initEnemy();
 
     Texture2D texture = LoadTexture("../Assets/scarfy.png");
 
     initPlayer(&texture);
+    loadAudios();
     // tmx_map* map = NULL;
     // initMap(argc, argv, &map);
 
@@ -39,25 +42,22 @@ int main(int argc, char *argv[]) {
     //     return -1;
     // }
 
-    Camera2D camera = { 0 };
-    camera.target = *getPlayerPhysicsObject()->pos;
-    camera.offset = (Vector2){ 1920/2/2.0f, 1080/2/2.0f };
-    camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
-  
+
+    Enemy* e = spawnEnemy();
+    Camera2D* cam = initCamera();
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
         // loadMap(map, SCREENWIDTH, SCREENHEIGHT);
         tickPlayer();
         handleInput();
         updatePhysics(&delta);
-        camera.target = *getPlayerPhysicsObject()->pos;
+        updateCamera(getPlayerPhysicsObject());
 
         BeginDrawing();
-            BeginMode2D(camera);
+            BeginMode2D(*cam);
                 animateSprite();
                 drawMagic();
-                drawPhysicsRect(getPlayerPhysicsObject(), RED);
+                drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
                 DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
                 ClearBackground(RAYWHITE);
             EndMode2D();
@@ -68,16 +68,33 @@ int main(int argc, char *argv[]) {
     destroyPlayer();
     destroyAnimatedSprites();
     destroyPhysicsObjects();
+    destroyEnemies();
     destroyMagics();
+    unloadAudios();
     // unLoadMap(map);
     CloseWindow();
     return 0;
 }
 
+Texture2D inputTextures[2];
+
+void initDrawInputEffect() {
+    inputTextures[0] = LoadTexture("../Assets/input/bg.png");
+    inputTextures[1] = LoadTexture("../Assets/input/letters.png");
+}
 
 void drawInputEffect() {
     if(!isInputBuffEmpty()) {
-        DrawText(getInputBuff(), 190, 200, 20, BLACK);
+        const int sx = SCREENWIDTH/2-inputTextures[0].width*1.5, sy = SCREENHEIGHT/4-inputTextures[0].height*1.5;
+        DrawTexturePro(inputTextures[0], (Rectangle) {0, 0, inputTextures[0].width, inputTextures[0].height}, (Rectangle) {sx, sy, inputTextures[0].width*3, inputTextures[0].height*3}, (Vector2) {0,0}, 0, WHITE);
+        for(int i = 0; i<4 && getInputBuff()[i]!='\0'; i++) {
+            DrawTexturePro(
+                inputTextures[1],
+                (Rectangle) {14*(getInputBuff()[i]=='l'?0:getInputBuff()[i]=='k'?1:getInputBuff()[i]=='i'?2:3), 0, inputTextures[1].width/4, inputTextures[1].height},
+                (Rectangle) {sx+21+(inputTextures[1].width/4+3)*3*i, sy+30, inputTextures[1].width/4*3, inputTextures[1].height*3},
+                (Vector2) {0,0}, 0, WHITE
+                );
+        }
     }
 }
 

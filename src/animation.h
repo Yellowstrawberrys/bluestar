@@ -15,7 +15,7 @@ typedef struct _animatedSprite {
 
 int initAnimationSprites();
 void animateSprite();
-AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vector2* coordinate, int count, int fps);
+AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle range, Vector2* coordinate, int count, int fps);
 void destroyAnimatedSprite(AnimatedSprite* sprite);
 void destroyAnimatedSprites();
 
