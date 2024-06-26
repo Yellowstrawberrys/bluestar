@@ -14,7 +14,6 @@ typedef struct _physicsObject {
 
     void (*onCollide)(struct _physicsObject*);
     void (*onPhysicsUpdate)(Vector2);
-    bool isColliding;
 
     float weight;
 } PhysicsObject;

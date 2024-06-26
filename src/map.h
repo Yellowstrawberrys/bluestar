@@ -12,13 +12,7 @@
 #include <stdlib.h>
 
 #include "tmx.h"
-#include "../physics.h"
 
-typedef struct _MapObject {
-    int width, height;
-
-    Vector2 position;
-} Tile;
 
 Texture2D *LoadMapTexture(const char *fileName);
 void UnloadMapTexture(Texture2D *tex);

@@ -10,9 +10,8 @@
 #include <raylib-tmx.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../entity/player.h"
 
-#include "../utils/bsutils.h"
+#include "utils/bsutils.h"
 #include "tmx.h"
 
 Texture2D *LoadMapTexture(const char *fileName)
@@ -60,6 +59,7 @@ void DrawTmxLayer(tmx_map *map, tmx_layer *layer)
             tile = map->tiles[gid];
             if (tile != NULL)
             {
+                // Get tile's texture out of the tileset texture
                 if (tile->image != NULL)
                 {
                     tsTexture = (Texture2D *)tile->image->resource_image;
