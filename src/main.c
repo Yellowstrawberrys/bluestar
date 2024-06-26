@@ -67,22 +67,21 @@ int main(int argc, char *argv[]) {
         updatePhysics(&delta);
         camera.target = *getPlayerPhysicsObject()->pos;
         BeginDrawing();
-            BeginMode2D(camera);
-                DrawTextureRec(
-                    mapFrameBuffer.texture,
-                    (Rectangle){0, 0, mapFrameBuffer.texture.width, -mapFrameBuffer.texture.height},
-                    (Vector2){0.0, 0.0},
-                    WHITE);
-                animateSprite();
-                drawMagic();
-                drawPhysicsRect(getPlayerPhysicsObject(), RED);
-                DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-                ClearBackground(RAYWHITE);
-            EndMode2D();
-            drawInputEffect();
-            drawPlayerStat();
+        BeginMode2D(camera);
+        DrawTextureRec(
+            mapFrameBuffer.texture,
+            (Rectangle){0, 0, mapFrameBuffer.texture.width, -mapFrameBuffer.texture.height},
+            (Vector2){0.0, 0.0},
+            WHITE);
+        animateSprite();
+        drawMagic();
+        drawPhysicsRect(getPlayerPhysicsObject(), RED);
+        ClearBackground(RAYWHITE);
+        EndMode2D();
+        drawInputEffect();
+        drawPlayerStat();
         EndDrawing();
-    }
+        }
     destroyPlayer();
     destroyAnimatedSprites();
     destroyPhysicsObjects();
@@ -94,7 +93,7 @@ int main(int argc, char *argv[]) {
 }
 
 
-void drawInputEffect() {
+void drawInputEffect(){
     if(!isInputBuffEmpty()) {
         DrawText(getInputBuff(), 190, 200, 20, BLACK);
     }
