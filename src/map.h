@@ -1,14 +1,20 @@
-#ifndef MAP_H
-#define MAP_H
-#include <tmx.h>
+//
+// Created by 정은수 on 2024. 6. 13..
+//
 
-typedef struct _staticObject {
-    Rectangle rec;
-    int material;
-} StaticObject;
+#pragma once
+#include <raylib.h>
+#include "map.h"
 
-void initMap(int argc, char *argv[], tmx_map** map);
-void loadMap(tmx_map* map, const int Width, const int Height);
-void unLoadMap(tmx_map* map);
+#include <assert.h>
+#include <raylib-tmx.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#endif //MAP_H
+#include "tmx.h"
+
+
+Texture2D *LoadMapTexture(const char *fileName);
+void UnloadMapTexture(Texture2D *tex);
+void DrawTmxLayer(tmx_map *map, tmx_layer *layer);
+void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
