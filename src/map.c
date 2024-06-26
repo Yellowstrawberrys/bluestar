@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "bsutils.h"
+#include "utils/bsutils.h"
 #include "tmx.h"
 
 Texture2D *LoadMapTexture(const char *fileName)

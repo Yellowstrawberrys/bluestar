@@ -3,46 +3,51 @@
 //
 
 #include "inputhandle.h"
+
+#include <stdio.h>
+
 #include "raylib.h"
 #include "string.h"
-#include "player.h"
+#include "entity/player.h"
 
 void clearBuffer();
 
 
 int coolTime = 0;
 int buffI = 0;
-char inputBuff[4];
+char inputBuff[5];
 
-void handleInput(Player *player, float delta) { //adding player struct and deltatime
+void handleInput() { //adding player struct and deltatime
     if(coolTime < 0) {
         clearBuffer();
     }else coolTime--;
 
     // TODO: Movements
-    if(IsKeyDown(KEY_W)) {
-        player -> speed = -PLAYER_JUMP_SPD; player -> canJump = false;
+    if(IsKeyPressed(KEY_W)) {
+        jumpPlayer();
     }else if(IsKeyDown(KEY_D)) {
-        player -> position.x += PLAYER_HOR_SPD * delta;
+        movePlayer(1);
     }else if(IsKeyDown(KEY_A)) {
-        player -> position.x -= PLAYER_HOR_SPD * delta;
+        movePlayer(-1);
     }else if(IsKeyDown(KEY_S)) {
-        
+        // TODO: Fucked
     }
 
     char c = GetCharPressed();
     while (c!=0) {
-        if(buffI<3&&(c=='i'||c=='j'||c=='k'||c=='l')) {inputBuff[buffI++] = c; coolTime = 60*3;}
+        if(buffI<4&&(c=='i'||c=='j'||c=='k'||c=='l')) {inputBuff[buffI++] = c; coolTime = 60*3;}
         c = GetKeyPressed();
     }
 
-    if(IsKeyDown(KEY_SPACE)) {
+    if(IsKeyPressed(KEY_SPACE)) {
+        printf("%s\n", inputBuff);
         if(strcasecmp(inputBuff, "IIKK")==0) {
-            // TODO: Heal & -150 mana
+            if(useMana(150)) heal(50);
         }else if(strcasecmp(inputBuff, "JJLL")==0) {
             // TODO: Damage with {mana} damage
         }else if(strcasecmp(inputBuff, "JLJL")==0) {
             // TODO: Normal Attack & -5 mana
+            if(useMana(5)) shootMagic(0);
         }else if(strcasecmp(inputBuff, "KLJK")==0) {
             // TODO: Arrange Damage & -70
         }else if(strcasecmp(inputBuff, "JILk")==0) {
@@ -50,7 +55,16 @@ void handleInput(Player *player, float delta) { //adding player struct and delta
         }else {
             // TODO: 'Failed' Sound effect
         }
+        clearBuffer();
     }
+}
+
+int isInputBuffEmpty() {
+    return buffI == 0;
+}
+
+char* getInputBuff() {
+    return inputBuff;
 }
 
 void clearBuffer() {
