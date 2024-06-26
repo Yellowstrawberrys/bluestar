@@ -2,13 +2,13 @@
 #include "player.h"
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "magic.h"
 #include "../animation.h"
 #include "../physics.h"
 #include "../utils/bsutils.h"
+#include "../cameraman.h"
 
 Vector2 pos = {350.0f, 200.0f};
 PhysicsObject* physics;
@@ -36,10 +36,7 @@ void onPhysicsUpdate(Vector2 changed) {
 }
 
 void initPlayer(Texture2D* scarfy) {
-    frameRec = malloc(sizeof(frameRec)); // B 1
-    frameRec->width = (float)scarfy->width/6;
-    frameRec->height = (float)scarfy->height;
-    sprite = generateAnimatedSprite(scarfy, frameRec, &pos, 6, 20);
+    sprite = generateAnimatedSprite(scarfy, (Rectangle) {0, 0, (float)scarfy->width/6, (float)scarfy->height}, &pos, 6, 20);
     sprite->pause = 1;
     physics = generatePhysicsObject(&pos, 50, 60, 10);
     physics->onPhysicsUpdate = &onPhysicsUpdate;
@@ -75,16 +72,19 @@ int getPlayerMana() {
 
 void jumpPlayer() {
     if(!canJump) return;
-    printf("%f\n", pos.y);
     physics->force.y -= PLAYER_JUMP_F;
     canJump = 0;
 }
 
 
 void shootMagic(const int type) {
+    addCameraOffset( (Vector2) {5*physics->facing, 0});
     switch (type) {
         case 0:
             spawnMagic(pos, 10*physics->facing)->physics->type=1;
+            break;
+        case 1:
+            spawnMagic(pos, 10*physics->facing)->physics->type=2;
             break;
         default: break;
     }
@@ -98,5 +98,4 @@ void movePlayer(const int modifier) {
 
 void destroyPlayer() {
     destroyAnimatedSprite(sprite);
-    free(frameRec); // R 1
 }

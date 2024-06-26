@@ -4,11 +4,16 @@
 
 #include "magic.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+#include "../entity/enemy.h"
 #include "../utils/bsutils.h"
 #include "../utils/debugutils.h"
+
+Magic* findMagicByPhysics(const PhysicsObject* p);
+
 
 List* magics;
 
@@ -17,13 +22,23 @@ int initMagics() {
     return 1;
 }
 
+void onHit(PhysicsObject* me, PhysicsObject* hit) {
+    printf("type: %d\n", hit->type);
+    if(hit->type==3) {
+        damageEnemy(hit, 10);
+        destroyMagic(findMagicByPhysics(me));
+    }
+}
+
+
 Magic* spawnMagic(const Vector2 loc, const int modifier) {
-    Magic* m = (Magic*) malloc(sizeof(Magic));
-    Vector2* vec = malloc(sizeof(Vector2));
+    Magic* m = (Magic*) malloc(sizeof(Magic)); // B - Magic (1)
+    Vector2* vec = malloc(sizeof(Vector2)); // B - Vector (1)
     vec->x = loc.x;
     vec->y = loc.y;
     m->physics = generatePhysicsObject(vec, 15,15, 0);
     m->physics->force.x = modifier;
+    m->physics->onCollide = onHit;
     addToList(magics, m);
     return m;
 }
@@ -48,11 +63,31 @@ void drawMagic() {
     }
 }
 
+Magic* findMagicByPhysics(const PhysicsObject* p) {
+    const LNode* node = magics->head;
+    while (node) {
+        Magic* magic = (Magic*) node->address;
+        if(magic->physics==p) return magic;
+        node = node->next;
+    }
+    return NULL;
+}
+
 void destroyMagic(Magic* m) {
     removeFromListByAddress(magics, m);
-    free(m);
+    free( m->physics->pos); // R - Vector (1)
+    unregisterPhysicsObject(m->physics);
+    free(m); // R - Enemy (1)
 }
 
 void destroyMagics() {
-    clearListWithValues(magics);
+    LNode* node = magics->head;
+    while (node) {
+        Magic* magic = (Magic*) node->address;
+        free(magic->physics->pos); // R - Vector (1)
+        unregisterPhysicsObject(magic->physics);
+        free(magic); // R - Enemy (1)
+        node = node->next;
+    }
+    destroyList(magics);
 }

@@ -41,10 +41,14 @@ void animateSprite() {
 
 
 
-AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vector2* coordinate, const int count, const int fps) {
-    AnimatedSprite* sprite = malloc(sizeof(AnimatedSprite));
+AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle range, Vector2* coordinate, const int count, const int fps) {
+    AnimatedSprite* sprite = malloc(sizeof(AnimatedSprite)); // B - AnimatedSprite (1)
+    sprite->range = malloc(sizeof(Rectangle)); // B - Rectangle (1)
+    sprite->range->x = range.x;
+    sprite->range->y = range.y;
+    sprite->range->width = range.width;
+    sprite->range->height = range.height;
     sprite->texture = texture;
-    sprite->range = range;
     sprite->coordinate = coordinate;
     sprite->pause = 0;
     sprite->count = count;
@@ -57,9 +61,15 @@ AnimatedSprite* generateAnimatedSprite(Texture2D* texture, Rectangle* range, Vec
 
 void destroyAnimatedSprite(AnimatedSprite* sprite) {
     removeFromListByAddress(sprites, sprite);
-    free(sprite);
+    free(sprite->range); // R - Rectangle (1)
+    free(sprite); // R - AnimatedSprite (1)
 }
 
 void destroyAnimatedSprites() {
-    clearListWithValues(sprites);
+    LNode* node = sprites->head;
+    while (node) {
+        free(node->address); // R - Enemy (1)
+        node = node->next;
+    }
+    destroyList(sprites);
 }
