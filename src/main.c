@@ -29,7 +29,7 @@ Texture2D *LoadMapTexture(const char *fileName);
 void UnloadMapTexture(Texture2D *tex);
 void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
 void drawInputEffect();
-void drawPlayerStat();
+void drawPlayerStat(Player* player);
 void initPlayerRec(Player player, Rectangle* playerRec);
 
 RenderTexture2D mapFrameBuffer;
@@ -83,10 +83,10 @@ int main(int argc, char *argv[]) {
                             WHITE);
             DrawRectanglePro(playerRect,(Vector2){0,0},0.0f,BLACK);
         EndTextureMode();
-        tickPlayer(&player);
+        tickPlayer();
         handleInput();
         updatePhysics(&delta);
-        updateCamera(getPlayerPhysicsObject(player));
+        updateCamera(getPlayerPhysicsObject());
 
         BeginDrawing();
             BeginMode2D(*cam);
@@ -106,17 +106,17 @@ int main(int argc, char *argv[]) {
 
                 animateSprite();
                 drawMagic();
-                drawPhysicsRect(getPlayerPhysicsObject(player), BLACK);
+                drawPhysicsRect(getPlayerPhysicsObject(), BLACK);
                 ClearBackground(RAYWHITE);
             EndMode2D();
             drawInputEffect();
-            drawPlayerStat();
+            drawPlayerStat(&player);
         EndDrawing();
     }
-    destroyPlayer(&player);
-    destroyAnimatedSprites();
+    destroyPlayer();
     destroyEnemies();
     destroyMagics();
+    destroyAnimatedSprites();
     destroyPhysicsObjects();
     unloadAudios();
     tmx_free_resource_manager(rm);
@@ -151,8 +151,8 @@ void drawInputEffect(){
 
 void drawPlayerStat(Player* player) {
     printf("drawPlayerStat called\n");
-    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(*player), getPlayerMana(*player)), 0, 0, 20, BLACK);
-    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject(*player)->pos->x, getPlayerPhysicsObject(*player)->pos->y), 0, 20, 20, BLACK);
+    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(), getPlayerMana()), 0, 0, 20, BLACK);
+    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject()->pos->x, getPlayerPhysicsObject()->pos->y), 0, 20, 20, BLACK);
 }
 
 void initPlayerRec(Player player, Rectangle* playerRec) {

@@ -39,18 +39,18 @@ typedef struct {
 } Player;
 
 
-void tickPlayer(Player* player);
+void tickPlayer();
 void initPlayer(Player* player);
-void jumpPlayer(Player* player);
-void movePlayer(const int modifier, Player* player);
-void destroyPlayer(Player* player);
-int getPlayerHealth(Player player);
-int getPlayerMana(Player player);
-void heal(const int i, Player* player);
-int useMana(const int i, Player* player);
-void shootMagic(const int type, Player* player);
-PhysicsObject* getPlayerPhysicsObject(Player player);
-AnimatedSprite* getPlayerSprite(Player player);
+void jumpPlayer();
+void movePlayer(const int modifier);
+void destroyPlayer();
+int getPlayerHealth();
+int getPlayerMana();
+void heal(const int i);
+int useMana(const int i);
+void shootMagic(const int type);
+PhysicsObject* getPlayerPhysicsObject();
+AnimatedSprite* getPlayerSprite();
 int checkPlayerTileCollision(Player* player, Rectangle collisionBoxes, Rectangle playerRect);
 
 #endif //PLAYER_H

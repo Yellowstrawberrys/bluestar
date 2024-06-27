@@ -19,17 +19,17 @@ int coolTime = 0;
 int buffI = 0;
 char inputBuff[5];
 
-void handleInput(Player* player) { //adding player struct and deltatime
+void handleInput() { //adding player struct and deltatime
     if(coolTime < 0) {
         clearBuffer();
     }else coolTime--;
 
     if(IsKeyPressed(KEY_W)) {
-        jumpPlayer(player);
+        jumpPlayer();
     }else if(IsKeyDown(KEY_D)) {
-        movePlayer(1, player);
+        movePlayer(1);
     }else if(IsKeyDown(KEY_A)) {
-        movePlayer(-1, player);
+        movePlayer(-1);
     }
 
     char c = GetCharPressed();
@@ -40,16 +40,16 @@ void handleInput(Player* player) { //adding player struct and deltatime
 
     if(IsKeyPressed(KEY_SPACE)) {
         printf("%s\n", inputBuff);
-        if(strcasecmp(inputBuff, "IIKK")==0 && useMana(150, player)) {
-            heal(50, player);
+        if(strcasecmp(inputBuff, "IIKK")==0 && useMana(150)) {
+            heal(50);
             playAudio(5);
         }else if(strcasecmp(inputBuff, "JJLL")==0) {
             // TODO: Damage with {mana} damage
-        }else if(strcasecmp(inputBuff, "JLJL")==0&&useMana(5, player)) {
-            shootMagic(0, *player);
+        }else if(strcasecmp(inputBuff, "JLJL")==0&&useMana(5)) {
+            shootMagic(0);
             playAudio(1);
-        }else if(strcasecmp(inputBuff, "KLJK")==0 && useMana(70, player)) {
-            shootMagic(1, *player);
+        }else if(strcasecmp(inputBuff, "KLJK")==0 && useMana(70)) {
+            shootMagic(1);
             playAudio(2);
         }else if(strcasecmp(inputBuff, "JILk")==0) {
             // TODO: Round Damage ~3m & -100

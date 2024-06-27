@@ -5,6 +5,8 @@
 #ifndef INPUTHANDLE_H
 #define INPUTHANDLE_H
 
+#include "entity/player.h"
+
 void handleInput();
 int isInputBuffEmpty();
 char* getInputBuff();
