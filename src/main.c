@@ -1,3 +1,4 @@
+#include <raylib-tmx.h>
 #include <stdlib.h>
 #include <raylib.h>
 #include <stdio.h>
@@ -12,8 +13,9 @@
 #include "entity/magic.h"
 #include "entity/player.h"
 #include "tmx.h"
-// #include "map.h"
+#include "maps/MapCollision.h"
 
+#define RAYLIB_TMX_IMPLEMENTATION
 #define TUTORIAL_PATH "../Assets/levels/tutorial_level.tmx"
 #define LEVEL_ONE_PATH "../Assets/levels/level_one.tmx"
 
@@ -28,13 +30,17 @@ void UnloadMapTexture(Texture2D *tex);
 void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf);
 void drawInputEffect();
 void drawPlayerStat();
+void initPlayerRec(Player player, Rectangle* playerRec);
 
 RenderTexture2D mapFrameBuffer;
 
-
 int a = 0;
+int playerState;
+const int scaleMultiplier = 32;
 
 int main(int argc, char *argv[]) {
+    printf("main function started\n");
+    Player player;
     SetTargetFPS(60);
     InitWindow(SCREENWIDTH, SCREENHEIGHT, "푸른별");
     InitAudioDevice();
@@ -42,24 +48,47 @@ int main(int argc, char *argv[]) {
     initPhysics();
     initMagics();
     initDrawInputEffect();
-    initEnemy();
+    RenderTexture2D backgroundTexture = LoadRenderTexture(1920 ,1080);
+    RenderTexture2D renderAll = LoadRenderTexture(32,32);
+    // initEnemy();
+    tmx_map* map = LoadTMX(LEVEL_ONE_PATH);
+
+    tmx_resource_manager* rm = tmx_make_resource_manager();
 
     Texture2D texture = LoadTexture("../Assets/scarfy.png");
+    DrawTMX(map,0,0,WHITE);
 
-    initPlayer(&texture);
+    CollisionBoxes *boxes = initCollisionBoxes(LEVEL_ONE_PATH, (Vector2){0.0f, 0.0f}, scaleMultiplier, rm, 1);
+
+    initPlayer(&texture, &player);
     loadAudios();
-    tmx_map* map = NULL;
+    Rectangle playerRect = {
+        player.pos.x-player.physics->width,
+        player.pos.y-player.physics->height,
+        player.physics->width*2,
+        player.physics->height*2
+    };
 
-    Enemy* e = spawnEnemy();
+    // Enemy* e = spawnEnemy();
     Camera2D* cam = initCamera();
     RenderTmxMapToFramebuf(LEVEL_ONE_PATH, &mapFrameBuffer);
-    while (!WindowShouldClose()) {
-        float delta = GetFrameTime();
-        tickPlayer();
-        handleInput();
-        // updatePhysics(&delta);
-        updateCamera(getPlayerPhysicsObject());
 
+    while (!WindowShouldClose()) {
+        initPlayerRec(player, &playerRect);
+        float delta = GetFrameTime();
+        BeginTextureMode(renderAll);
+            DrawTexturePro(backgroundTexture.texture,
+                            (Rectangle){ 0.0f, 0.0f, (float)backgroundTexture.texture.width, (float)-backgroundTexture.texture.height },
+                            (Rectangle){ (0.0f), (0.0f),backgroundTexture.texture.width * scaleMultiplier, backgroundTexture.texture.height * scaleMultiplier},
+                            (Vector2){ 0, 0 },
+                            0.0f,
+                            WHITE);
+            DrawRectanglePro(playerRect,(Vector2){0,0},0.0f,BLACK);
+        EndTextureMode();
+        tickPlayer(&player);
+        handleInput();
+        updatePhysics(&delta);
+        updateCamera(getPlayerPhysicsObject(player));
         BeginDrawing();
             BeginMode2D(*cam);
                 DrawTextureRec(
@@ -67,30 +96,43 @@ int main(int argc, char *argv[]) {
                   (Rectangle){0, 0, mapFrameBuffer.texture.width, -mapFrameBuffer.texture.height},
                   (Vector2){0.0, 0.0},
                   WHITE
-                );
+                  );
+
+                // Draw collision rectangles
+                for (int i = 0; i < boxes->amountCollisionBoxes; i++) {
+                    Rectangle *currentRectangle = boxes->scaledCollision + i;
+                    DrawRectangleLines(currentRectangle->x, currentRectangle->y, currentRectangle->width, currentRectangle->height, BLUE);
+                    checkPlayerTileCollision(&player, *currentRectangle, playerRect);
+                }
+
                 animateSprite();
                 drawMagic();
-                // drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
+                drawPhysicsRect(getPlayerPhysicsObject(player), BLACK);
                 ClearBackground(RAYWHITE);
             EndMode2D();
             drawInputEffect();
-            drawPlayerStat();
+            // drawPlayerStat();
         EndDrawing();
     }
-    destroyPlayer();
+    destroyPlayer(&player);
     destroyAnimatedSprites();
     destroyPhysicsObjects();
-    destroyEnemies();
+    // destroyEnemies();
     destroyMagics();
     unloadAudios();
+    tmx_free_resource_manager(rm);
     UnloadRenderTexture(mapFrameBuffer);
+    UnloadTMX(map);
     CloseWindow();
+    printf("main function finished\n");
     return 0;
 }
+
 
 Texture2D inputTextures[2];
 
 void initDrawInputEffect() {
+    printf("initDrawInputEffect called\n");
     inputTextures[0] = LoadTexture("../Assets/input/bg.png");
     inputTextures[1] = LoadTexture("../Assets/input/letters.png");
 }
@@ -110,7 +152,15 @@ void drawInputEffect(){
     }
 }
 
-void drawPlayerStat() {
-    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(), getPlayerMana()), 0, 0, 20, BLACK);
-    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject()->pos->x, getPlayerPhysicsObject()->pos->y), 0, 20, 20, BLACK);
+void drawPlayerStat(Player* player) {
+    printf("drawPlayerStat called\n");
+    DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(*player), getPlayerMana(*player)), 0, 0, 20, BLACK);
+    DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject(*player)->pos->x, getPlayerPhysicsObject(*player)->pos->y), 0, 20, 20, BLACK);
+}
+
+void initPlayerRec(Player player, Rectangle* playerRec) {
+    playerRec->x = player.pos.x-player.physics->width;
+    playerRec->y = player.pos.y-player.physics->height;
+    playerRec->width = player.physics->width*2;
+    playerRec->height = player.physics->height*2;
 }

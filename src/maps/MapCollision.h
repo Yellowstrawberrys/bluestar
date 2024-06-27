@@ -1,13 +1,13 @@
 #ifndef MAP_COLLISION_H
 #define MAP_COLLISION_H
 #include <stdbool.h>
-#include "./include/raylib.h"
-#include "include/tmx.h"
+#include "raylib.h"
+#include "tmx.h"
 
 
 typedef struct CollisionBoxes {
     int amountCollisionBoxes;
-    Rectangle *scaledCollision;
+    Rectangle* scaledCollision;
     float scale;
 } CollisionBoxes;
 
