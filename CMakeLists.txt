@@ -59,10 +59,15 @@ if (NOT raylib-tmx_FOUND)
     endif()
 endif()
 
+
 #include_directories("/opt/homebrew/Cellar/raylib/5.0/include")
 add_executable(smallbluestar src/main.c
-        src/map.c
-        src/map.h
+        src/maps/map.c
+        src/maps/map.h
+        src/maps/TmxCollisionMapper.c
+        src/maps/TmxCollisionMapper.h
+        src/maps/MapCollision.c
+        src/maps/MapCollision.h
         src/physics.c
         src/utils/bsutils.c
         src/utils/bsutils.h
