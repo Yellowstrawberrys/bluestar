@@ -44,20 +44,20 @@ int main(int argc, char *argv[]) {
     initDrawInputEffect();
     initEnemy();
 
-    Texture2D texture = LoadTexture("../Assets/scarfy.png");
+    Texture2D texture = LoadTexture("../Assets/walk.png");
 
-    initPlayer(&texture);
+    initPlayer();
     loadAudios();
     tmx_map* map = NULL;
 
-    Enemy* e = spawnEnemy();
+    Enemy* e = spawnEnemy((Vector2){500, 200});
     Camera2D* cam = initCamera();
     RenderTmxMapToFramebuf(LEVEL_ONE_PATH, &mapFrameBuffer);
     while (!WindowShouldClose()) {
         float delta = GetFrameTime();
         tickPlayer();
         handleInput();
-        // updatePhysics(&delta);
+        updatePhysics(&delta);
         updateCamera(getPlayerPhysicsObject());
 
         BeginDrawing();
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
                 );
                 animateSprite();
                 drawMagic();
-                // drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
+                drawPhysicsRect(getPlayerPhysicsObject(), BLUE);
                 ClearBackground(RAYWHITE);
             EndMode2D();
             drawInputEffect();
@@ -79,9 +79,9 @@ int main(int argc, char *argv[]) {
     }
     destroyPlayer();
     destroyAnimatedSprites();
-    destroyPhysicsObjects();
     destroyEnemies();
     destroyMagics();
+    destroyPhysicsObjects();
     unloadAudios();
     UnloadRenderTexture(mapFrameBuffer);
     CloseWindow();
@@ -97,7 +97,7 @@ void initDrawInputEffect() {
 
 void drawInputEffect(){
     if(!isInputBuffEmpty()) {
-        const int sx = SCREENWIDTH/2-inputTextures[0].width*1.5, sy = SCREENHEIGHT/4-inputTextures[0].height*1.5;
+        const int sx = SCREENWIDTH/2-inputTextures[0].width*1.5, sy = SCREENHEIGHT/8-inputTextures[0].height*1.5;
         DrawTexturePro(inputTextures[0], (Rectangle) {0, 0, inputTextures[0].width, inputTextures[0].height}, (Rectangle) {sx, sy, inputTextures[0].width*3, inputTextures[0].height*3}, (Vector2) {0,0}, 0, WHITE);
         for(int i = 0; i<4 && getInputBuff()[i]!='\0'; i++) {
             DrawTexturePro(

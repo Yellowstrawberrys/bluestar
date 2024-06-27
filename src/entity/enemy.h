@@ -14,7 +14,7 @@ typedef struct _enemy {
 } Enemy;
 
 void initEnemy();
-Enemy* spawnEnemy();
+Enemy* spawnEnemy(const Vector2 vector2);
 void damageEnemy(const PhysicsObject* o, const int amount);
 void destroyEnemies();
 

@@ -3,7 +3,6 @@
 //
 
 #include "cameraman.h"
-
 #include <math.h>
 #include <stdio.h>
 
@@ -22,12 +21,12 @@ int shakeMode = 0;
 Camera2D* initCamera() {
     camera.offset = (Vector2) {CAMERA_OFFSET_X, CAMERA_OFFSET_Y};
     camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
+    camera.zoom = 1.5f;
     return &camera;
 }
 
 void updateCamera(const PhysicsObject* target) {
-    camera.target = *target->pos;
+    camera.target = (Vector2) {fmaxf(fminf(target->pos->x, 5000+280), 480), fmaxf(fminf(target->pos->y, 370), 1080/2/2)};
 
     if(camera.offset.x != CAMERA_OFFSET_X) {
         if(round(camera.offset.x) == CAMERA_OFFSET_X) {camera.offset.x = CAMERA_OFFSET_X;force.x=0;return;}
@@ -42,6 +41,3 @@ void addCameraOffset(const Vector2 vec) {
     force.x += vec.x;
     force.y += vec.y;
 }
-
-
-//TODO debug physics, charactor modeling (animations (idle, run, attack, jump(hopefuly)), charactor size, most important -> maintance camera ( follows player but doesn't go out of map)
