@@ -55,13 +55,10 @@ int main(int argc, char *argv[]) {
 
     tmx_resource_manager* rm = tmx_make_resource_manager();
 
-    Texture2D texture = LoadTexture("../Assets/walk.png");
     DrawTMX(map,0,0,WHITE);
 
     CollisionBoxes *boxes = initCollisionBoxes(LEVEL_ONE_PATH, (Vector2){0.0f, 0.0f}, scaleMultiplier, rm, 1);
-
-    initPlayer(&texture, &player);
-
+    initPlayer(&player);
     loadAudios();
     Rectangle playerRect = {
         player.pos.x-player.physics->width,
@@ -89,7 +86,7 @@ int main(int argc, char *argv[]) {
         tickPlayer(&player);
         handleInput();
         updatePhysics(&delta);
-        updateCamera(getPlayerPhysicsObject());
+        updateCamera(getPlayerPhysicsObject(player));
 
         BeginDrawing();
             BeginMode2D(*cam);

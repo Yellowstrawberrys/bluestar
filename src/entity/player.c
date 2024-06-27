@@ -12,6 +12,7 @@ bool iscolliding = false;
 
 PhysicsObject* physics;
 Texture2D texture[2];
+AnimatedSprite* sprite;
 
 int health = PLAYER_MAX_HP, mana = PLAYER_MAX_MANA;
 int canJump = 1, f=0, mt=-1, fm=0;
@@ -37,11 +38,10 @@ void tickPlayer(Player* player) {
 }
 
 void onPhysicsUpdate(Vector2 changed, Player* player) {
-    if(fabsf(changed.x) > 0) {
-        player->sprite->pause = 0;
-    }else {
-        player->sprite->current = 0;
-        player->sprite->pause = 1;
+    if(sprite->type == 0 && fabsf(changed.x) > 0) {
+        sprite->pause = 0;
+    }else if(sprite->type == 0) {
+        sprite->pause = 1;
     }
 
     if(player->pos.y >= 300) canJump = 1;
