@@ -13,13 +13,12 @@ bool iscolliding = false;
 Texture2D texture[2];
 Player* player;
 
-int health = PLAYER_MAX_HP, mana = PLAYER_MAX_MANA;
-int canJump = 1, f=0, mt=-1, fm=0;
+int f=0, mt=-1, fm=0;
 
 void tickPlayer() {
-    if(mana>=PLAYER_MAX_MANA) return;
+    if(player->mana>=PLAYER_MAX_MANA) return;
     f++;
-    if(f>40) {mana++;f=0;}
+    if(f>40) {player->mana++;f=0;}
     if(mt != -1) fm++;
     if(fm>13 && mt != -1) {
         switch (mt) {
@@ -43,7 +42,7 @@ void onPhysicsUpdate(Vector2 changed) {
         player->sprite->pause = 1;
     }
 
-    if(player->pos.y >= 300) canJump = 1;
+    if(player->pos.y >= 300) player->canJump = 1;
 }
 
 void initPlayer(Player* p) {
