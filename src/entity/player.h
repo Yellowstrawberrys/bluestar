@@ -46,6 +46,7 @@ void movePlayer(const int modifier);
 void destroyPlayer();
 int getPlayerHealth();
 int getPlayerMana();
+void damagePlayer(const int i);
 void heal(const int i);
 int useMana(const int i);
 void shootMagic(const int type);

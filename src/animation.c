@@ -33,7 +33,7 @@ void animateSprite() {
                 (Rectangle) {as->coordinate->x+a->offset.x, as->coordinate->y-(a->range->height*as->scale)+a->offset.y, a->range->width*as->flipMod * as->scale, a->range->height * as->scale},
                 (Vector2) {(a->range->width-a->offset.x)*as->scale/2*as->flipMod + a->offset.x, -a->offset.y*as->scale/2*as->flipMod - a->offset.y}, 0, WHITE
             );
-            DrawCircle(as->coordinate->x, as->coordinate->y, 10, RED);
+            // DrawCircle(as->coordinate->x, as->coordinate->y, 10, RED);
 
             if(a->count == 0 || as->pause) {node = node->next;continue;}
 

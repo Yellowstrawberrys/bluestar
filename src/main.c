@@ -84,6 +84,7 @@ int main(int argc, char *argv[]) {
             DrawRectanglePro(playerRect,(Vector2){0,0},0.0f,BLACK);
         EndTextureMode();
         tickPlayer();
+        // tickEnemy();
         handleInput();
         updatePhysics(&delta);
         updateCamera(getPlayerPhysicsObject());
@@ -106,6 +107,7 @@ int main(int argc, char *argv[]) {
 
                 animateSprite();
                 drawMagic();
+                drawBullets();
                 drawPhysicsRect(getPlayerPhysicsObject(), BLACK);
                 ClearBackground(RAYWHITE);
             EndMode2D();
@@ -150,7 +152,7 @@ void drawInputEffect(){
 }
 
 void drawPlayerStat(Player* player) {
-    printf("drawPlayerStat called\n");
+    // printf("drawPlayerStat called\n");
     DrawText(TextFormat("Health: %d, Mana: %d", getPlayerHealth(), getPlayerMana()), 0, 0, 20, BLACK);
     DrawText(TextFormat("X: %f, Y: %f", getPlayerPhysicsObject()->pos->x, getPlayerPhysicsObject()->pos->y), 0, 20, 20, BLACK);
 }

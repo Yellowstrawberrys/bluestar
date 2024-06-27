@@ -4,24 +4,84 @@
 
 #include "enemy.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include "../utils/bsutils.h"
+#include "player.h"
+#include "raymath.h"
 
 void destroyEnemy(Enemy* enemy);
+void destroyBullet(Bullet* b);
+void destroyBulletByPhysics(PhysicsObject* p);
 
 
 List* enemies;
-int tickCounter;
+List* bullets;
 Animation* aniEnemy;
 Texture2D t;
 
+void ab() {
+    LNode* l = bullets->head;
+    printf("-------\n");
+    for(int i =0; i<bullets->size; i++) {
+        printf("LNode: %p, pointing: %p\n", l, l->next);
+        l = l->next;
+    }
+    printf("-------");
+}
+
 void initEnemy() {
     enemies = createList();
+    bullets = createList();
     t = LoadTexture("../Assets/enemy/a.png");
-    aniEnemy = generateAnimation(&t, (Rectangle) {0,0,t.width/8, t.height}, 8, 10, 1);
+    aniEnemy = generateAnimation(&t, (Rectangle) {0,0,t.width/8, t.height}, 8, 5, 1);
+}
+
+void onCollide(PhysicsObject* o, PhysicsObject* h) {
+    if(h->type==0) {
+        printf("c: %d\n", h->type);
+        damagePlayer(10);
+        destroyBulletByPhysics(o);
+        ab();
+    }
+}
+
+void spawnBullet(const Vector2 v, const Vector2 target) {
+    Bullet* b = malloc(sizeof(Bullet));
+    Vector2* vec = malloc(sizeof(Vector2));
+    vec->x = v.x;
+    vec->y = v.y;
+    PhysicsObject* o = generatePhysicsObject(vec, 5, 5, 0.1f);
+    o->force.x = (v.x-target.x) *0.1;
+    o->force.y = (v.y-target.y) *0.1;
+    o->onCollide = onCollide;
+    o->type = 4;
+    b->physics = o;
+    addToList(bullets, b);
+    ab();
+}
+
+void destroyBullet(Bullet* b) {
+    printf("destroyed %p\n", b->physics);
+    removeFromListByAddress(bullets, b);
+    Vector2* v = b->physics->pos;
+    unregisterPhysicsObject(b->physics);
+    free(v);
+    free(b);
+}
+
+void destroyBulletByPhysics(PhysicsObject* p) {
+    const LNode* node = bullets->head;
+    while (node) {
+        if(((Bullet*)node->address)->physics == p) {
+            destroyBullet(node->address);
+            return;
+        }
+        node = node->next;
+    }
 }
 
 Enemy* spawnEnemy(const Vector2 vector2) {
@@ -39,22 +99,31 @@ Enemy* spawnEnemy(const Vector2 vector2) {
     return enemy;
 }
 
+void drawBullets() {
+    const LNode* n = bullets->head;
+    for (int i =0; i< bullets->size; i++) {
+        PhysicsObject* o = ((Bullet*)n->address)->physics;
+        DrawCircle(o->pos->x, o->pos->y, 5, YELLOW);
+        if(((Bullet*)n->address)->age++>= 60) {destroyBulletByPhysics(o);}
+        n = n->next;
+    }
+}
+
+int tick = 0;
+
 void tickEnemy() {
+
     // TODO
-    // srand(time(NULL));
-    // LNode* node = enemies->head;
-    // while (node) {
-    //     int mv = rand()%3;
-    //
-    //
-    //     if(tickCounter>120) {
-    //         ((Enemy*)(node->address))
-    //     }
-    //
-    //
-    //     node = node->next;
-    // }
-    // tickCounter++;
+    LNode* node = enemies->head;
+    while (node) {
+        Enemy* e = (Enemy*)node->address;
+        if(e->sprite->current == 5 && !tick) {
+            spawnBullet(Vector2Add(*e->physics->pos, (Vector2) {0, 20}), *getPlayerPhysicsObject()->pos);
+            tick = 1;
+        }else tick = 0;
+
+        node = node->next;
+    }
 }
 
 void damageEnemy(const PhysicsObject* o, const int amount) {
@@ -93,7 +162,14 @@ void destroyEnemies() {
         free(enemy); // R - Enemy (1)
         node = node->next;
     }
+
+    node = bullets->head;
+    while (node) {
+        destroyBullet(node->address);
+        node = node->next;
+    }
     destroyList(enemies);
+    destroyList(bullets);
     destroyAnimation(aniEnemy);
     UnloadTexture(t);
 }

@@ -47,10 +47,10 @@ void updatePhysics(const float *delta) {
         p->pos->x = fmaxf(p->pos->x+p->force.x, 22);
         p->pos->y = imin(p->pos->y+p->force.y, 300);
         if(p->pos->y==300) p->force.y = 0;
+
         if(p->onPhysicsUpdate) {
             p->onPhysicsUpdate((Vector2) {p->force.x, p->force.y});
         }
-
         collideCheck(p);
         node = node->next;
     }

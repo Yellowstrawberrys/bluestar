@@ -81,6 +81,10 @@ void heal(const int i) {
     player->health = imin(100, player->health+i);
 }
 
+void damagePlayer(const int i) {
+    player->health -= i;
+}
+
 int useMana(const int i) {
     printf("useMana called with used mana : %d\n", i);
     if(player->mana-i >= 0 ) {
@@ -91,12 +95,12 @@ int useMana(const int i) {
 }
 
 int getPlayerHealth() {
-    printf("getPlayerHealth called\n");
+    // printf("getPlayerHealth called\n");
     return player->health;
 }
 
 int getPlayerMana() {
-    printf("getPlayerMana called\n");
+    // printf("getPlayerMana called\n");
     return player->mana;
 }
 
@@ -130,7 +134,6 @@ void destroyPlayer() {
 
 int checkPlayerTileCollision(Player* player, Rectangle collisionBoxes, Rectangle playerRect) {
     if(CheckCollisionRecs(playerRect, collisionBoxes)) {
-        printf("col\n");
         iscolliding = true;
     }
     return 0;
