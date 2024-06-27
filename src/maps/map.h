@@ -14,6 +14,12 @@
 #include "tmx.h"
 
 
+typedef struct _MapObject {
+    int width, height;
+
+    void (*onCollide)(struct _physicsObject*, struct _physicsObject*);
+} PhysicsObject;
+
 Texture2D *LoadMapTexture(const char *fileName);
 void UnloadMapTexture(Texture2D *tex);
 void DrawTmxLayer(tmx_map *map, tmx_layer *layer);

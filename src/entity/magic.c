@@ -44,10 +44,10 @@ Magic* spawnMagic(const Vector2 loc, const int modifier) {
 }
 
 void drawMagic() {
-    srand(time(NULL));
     const LNode* node = magics->head;
     while (node) {
         for(int x =0; x<5; x++) {
+            srand(time(NULL));
             for(int i =0; i<x*2; i++) {
                 DrawCircleGradient(((Magic*)node->address)->physics->pos->x+(rand()%10-5) + i*((Magic*)node->address)->physics->force.x,((Magic*)node->address)->physics->pos->y+(rand()%(10*x)-5*x), 5, WHITE, YELLOW);
             }
@@ -55,7 +55,7 @@ void drawMagic() {
 
         drawPhysicsRect(((Magic*)node->address)->physics, RED);
         ((Magic*)node->address)->age++;
-        if(((Magic*)node->address)->age > 60*10) {
+        if(((Magic*)node->address)->age > 60*4) {
             LNode* tmp = node->next;
             removeFromListByAddress(magics, node->address);
             node = tmp;
@@ -75,8 +75,9 @@ Magic* findMagicByPhysics(const PhysicsObject* p) {
 
 void destroyMagic(Magic* m) {
     removeFromListByAddress(magics, m);
-    free( m->physics->pos); // R - Vector (1)
+    Vector2 *vec = m->physics->pos;
     unregisterPhysicsObject(m->physics);
+    free(vec); // R - Vector (1)
     free(m); // R - Enemy (1)
 }
 
@@ -84,10 +85,11 @@ void destroyMagics() {
     LNode* node = magics->head;
     while (node) {
         Magic* magic = (Magic*) node->address;
-        free(magic->physics->pos); // R - Vector (1)
+        node = node->next;
+        Vector2* vec = magic->physics->pos;
         unregisterPhysicsObject(magic->physics);
         free(magic); // R - Enemy (1)
-        node = node->next;
+        free(vec); // R - Vector (1)
     }
     destroyList(magics);
 }

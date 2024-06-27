@@ -80,15 +80,62 @@ void* removeFromList(List* list, const int index) {
     return ad;
 }
 
-/**
- * @deprecated 램 누수
- */
-void clearListWithValues(List* list) {
-    LNode* node = list->head;
-    while (node) {
-        free(node->address);
-        node = node->next;
-        free(node); // R - LNode (1)
+ArrayList* createAList() {
+    ArrayList* list = (ArrayList*) malloc(sizeof(ArrayList)); // B - ArrayList (1)
+    list->elements = NULL;
+    list->size = 0;
+    return list;
+}
+
+void addToAList(ArrayList* list, void* address) {
+    void** elements = malloc(sizeof(void*) * (++list->size)); // B - void** (1)
+    for(int i=0; i<list->size-1; i++) {
+        elements[i] = list->elements[i];
     }
-    free(list);
+    elements[list->size-1] = address;
+    free(list->elements); // R - void** (1)
+    list->elements = elements;
+}
+
+void* getElementFromAList(const ArrayList* list, const int index) {
+    if(index < 0 || list->size < index) return NULL;
+    return list->elements[index];
+}
+
+int removeFromAListByAddress(ArrayList* list, const void* address) {
+    void** elements = malloc(sizeof(void*) * (--list->size)); // B - void** (2)
+    int a = -1;
+    for(int i=0,off=0; i<list->size+off; i++) {
+        if(elements[i]==address) {
+            off++;
+            a = i;
+        }
+        else elements[i-off] = list->elements[i];
+    }
+    if(a==-1) {
+        free(elements); // R - void** (2)
+    }else {
+        free(list->elements); // R - void** (2)
+        list->elements = elements;
+    }
+    return a;
+}
+
+void* removeFromAList(ArrayList* list, const int index) {
+    if(index > list->size) return NULL;
+    void** elements = malloc(sizeof(void*) * (--list->size)); // B - void** (3)
+    void* t = list->elements[index];
+    for (int i=0,off=0; i<list->size; i++) {
+        if(i==index) {
+            off++;
+        }else elements[i-off] = list->elements[i];
+    }
+    free(list->elements); // R - void** (3)
+    list->elements = elements;
+    return t;
+}
+
+void destroyAList(ArrayList* list) {
+    free(list->elements); // R - void** (1,2,3)
+    free(list); // R - ArrayList (1)
 }

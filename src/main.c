@@ -50,17 +50,18 @@ int main(int argc, char *argv[]) {
     initDrawInputEffect();
     RenderTexture2D backgroundTexture = LoadRenderTexture(1920 ,1080);
     RenderTexture2D renderAll = LoadRenderTexture(32,32);
-    // initEnemy();
+    initEnemy();
     tmx_map* map = LoadTMX(LEVEL_ONE_PATH);
 
     tmx_resource_manager* rm = tmx_make_resource_manager();
 
-    Texture2D texture = LoadTexture("../Assets/scarfy.png");
+    Texture2D texture = LoadTexture("../Assets/walk.png");
     DrawTMX(map,0,0,WHITE);
 
     CollisionBoxes *boxes = initCollisionBoxes(LEVEL_ONE_PATH, (Vector2){0.0f, 0.0f}, scaleMultiplier, rm, 1);
 
     initPlayer(&texture, &player);
+
     loadAudios();
     Rectangle playerRect = {
         player.pos.x-player.physics->width,
@@ -69,7 +70,7 @@ int main(int argc, char *argv[]) {
         player.physics->height*2
     };
 
-    // Enemy* e = spawnEnemy();
+    Enemy* e = spawnEnemy((Vector2){500, 200});
     Camera2D* cam = initCamera();
     RenderTmxMapToFramebuf(LEVEL_ONE_PATH, &mapFrameBuffer);
 
@@ -88,7 +89,8 @@ int main(int argc, char *argv[]) {
         tickPlayer(&player);
         handleInput();
         updatePhysics(&delta);
-        updateCamera(getPlayerPhysicsObject(player));
+        updateCamera(getPlayerPhysicsObject());
+
         BeginDrawing();
             BeginMode2D(*cam);
                 DrawTextureRec(
@@ -111,14 +113,14 @@ int main(int argc, char *argv[]) {
                 ClearBackground(RAYWHITE);
             EndMode2D();
             drawInputEffect();
-            // drawPlayerStat();
+            drawPlayerStat();
         EndDrawing();
     }
     destroyPlayer(&player);
     destroyAnimatedSprites();
-    destroyPhysicsObjects();
-    // destroyEnemies();
+    destroyEnemies();
     destroyMagics();
+    destroyPhysicsObjects();
     unloadAudios();
     tmx_free_resource_manager(rm);
     UnloadRenderTexture(mapFrameBuffer);
@@ -128,18 +130,16 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-
 Texture2D inputTextures[2];
 
 void initDrawInputEffect() {
-    printf("initDrawInputEffect called\n");
     inputTextures[0] = LoadTexture("../Assets/input/bg.png");
     inputTextures[1] = LoadTexture("../Assets/input/letters.png");
 }
 
 void drawInputEffect(){
     if(!isInputBuffEmpty()) {
-        const int sx = SCREENWIDTH/2-inputTextures[0].width*1.5, sy = SCREENHEIGHT/4-inputTextures[0].height*1.5;
+        const int sx = SCREENWIDTH/2-inputTextures[0].width*1.5, sy = SCREENHEIGHT/8-inputTextures[0].height*1.5;
         DrawTexturePro(inputTextures[0], (Rectangle) {0, 0, inputTextures[0].width, inputTextures[0].height}, (Rectangle) {sx, sy, inputTextures[0].width*3, inputTextures[0].height*3}, (Vector2) {0,0}, 0, WHITE);
         for(int i = 0; i<4 && getInputBuff()[i]!='\0'; i++) {
             DrawTexturePro(

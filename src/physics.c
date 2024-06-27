@@ -5,7 +5,7 @@
 #include "raylib.h"
 #include "physics.h"
 
-#include <stdio.h>
+#include <math.h>
 
 #include "utils/bsutils.h"
 
@@ -26,7 +26,9 @@ void updatePhysics(const float *delta) {
     const LNode* node = physicsObjects->head;
     for(int i = 0; i < physicsObjects->size; i++) {
         PhysicsObject* p = ((PhysicsObject*) node->address);
-        if(p->pos->y < 10) p->force.y = (GRAVITY*p->weight**delta)+p->force.y;
+        if(p->pos->y < 300) {
+            p->force.y = (GRAVITY*p->weight**delta)+p->force.y;
+        }
         if(p->force.x > 0) {
             p->force.x = imax(p->force.x-p->weight**delta, 0);
         }else if(p->force.x < 0) {
@@ -42,11 +44,11 @@ void updatePhysics(const float *delta) {
         //     default: break;
         // }
 
-        p->pos->x += p->force.x;
-        p->pos->y = imin(p->pos->y+p->force.y, 10);
-        if(p->pos->y==10) p->force.y = 0;
+        p->pos->x = fmaxf(p->pos->x+p->force.x, 22);
+        p->pos->y = imin(p->pos->y+p->force.y, 300);
+        if(p->pos->y==300) p->force.y = 0;
         if(p->onPhysicsUpdate) {
-            // p->onPhysicsUpdate((Vector2) {p->force.x, p->force.y});
+            p->onPhysicsUpdate((Vector2) {p->force.x, p->force.y});
         }
 
         collideCheck(p);
@@ -64,9 +66,8 @@ void collideCheck(PhysicsObject* o) {
             if(
             //      start X (p)           end X (o)             start X (o)          end X (p)
                 p->pos->x-p->width <= o->pos->x+o->width && o->pos->x-o->width <= p->pos->x+p->width &&
-                p->pos->y-p->height <= o->pos->y+o->height && o->pos->y-o->height <= p->pos->y+p->height
+                p->pos->y-p->height*2 <= o->pos->y && o->pos->y-o->height*2 <= p->pos->y
             ) {
-                printf("collide\n");
                 o->onCollide(o, p);
             }
             node = node->next;

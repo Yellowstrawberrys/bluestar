@@ -20,8 +20,8 @@
 #include "../maps/TmxCollisionMapper.h"
 
 #define G 400
-#define PLAYER_JUMP_F 20.0f
-#define PLAYER_MAX_SPEED 20.0f
+#define PLAYER_JUMP_F 15.0f
+#define PLAYER_MAX_SPEED 10.0f
 #define PLAYER_MAX_HP 100.0f
 #define PLAYER_MAX_MANA 200.0f
 #define PLAYERSPAWNX 350.0f
@@ -40,7 +40,7 @@ typedef struct {
 
 
 void tickPlayer(Player* player);
-void initPlayer(Texture2D* texture, Player* player);
+void initPlayer(Player* player);
 void jumpPlayer(Player* player);
 void movePlayer(const int modifier, Player* player);
 void destroyPlayer(Player* player);
@@ -48,7 +48,7 @@ int getPlayerHealth(Player player);
 int getPlayerMana(Player player);
 void heal(const int i, Player* player);
 int useMana(const int i, Player* player);
-void shootMagic(const int type, Player player);
+void shootMagic(const int type, Player* player);
 PhysicsObject* getPlayerPhysicsObject(Player player);
 AnimatedSprite* getPlayerSprite(Player player);
 int checkPlayerTileCollision(Player* player, Rectangle collisionBoxes, Rectangle playerRect);

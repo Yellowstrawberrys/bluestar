@@ -15,9 +15,13 @@ void destroyEnemy(Enemy* enemy);
 
 List* enemies;
 int tickCounter;
+Animation* aniEnemy;
+Texture2D t;
 
 void initEnemy() {
     enemies = createList();
+    t = LoadTexture("../Assets/enemy/a.png");
+    aniEnemy = generateAnimation(&t, (Rectangle) {0,0,t.width/8, t.height}, 8, 10, 1);
 }
 
 Enemy* spawnEnemy(const Vector2 vector2) {
@@ -25,9 +29,10 @@ Enemy* spawnEnemy(const Vector2 vector2) {
     Vector2* vec = malloc(sizeof(Vector2)); // B - Vector (1)
     vec->x = vector2.x;
     vec->y = vector2.y;
-    Texture2D t = LoadTexture("../Assets/enemy/a.png");
-    enemy->sprite = generateAnimatedSprite(&t, (Rectangle) {0,0,t.width/8, t.height}, vec, 8, 10); // B - AnimatedSprite (1)
-    enemy->physics = generatePhysicsObject(vec, 10, 10, 10); // B - PhysicsObject (1)
+    enemy->sprite = generateAnimatedSprite(vec, 3); // B - AnimatedSprite (1)
+    addToAList(enemy->sprite->animations, aniEnemy);
+    enemy->sprite->type = 0;
+    enemy->physics = generatePhysicsObject(vec, 65, 95, 50); // B - PhysicsObject (1)
     enemy->physics->type = 3;
     enemy->health = 50;
     addToList(enemies, enemy);
@@ -70,22 +75,25 @@ void damageEnemy(const PhysicsObject* o, const int amount) {
 
 void destroyEnemy(Enemy* enemy) {
     removeFromListByAddress(enemies, enemy);
-    free(enemy->physics->pos); // R - Enemy (1)
-    free(enemy->physics); // R - PhysicsObject (1)
-    free(enemy->sprite->texture);
-    free(enemy->sprite); // R - AnimatedSprite (1)
+    Vector2* vec = enemy->physics->pos;
+    destroyAnimatedSprite(enemy->sprite); // R - AnimatedSprite (1)
+    unregisterPhysicsObject(enemy->physics); // R - PhysicsObject (1)
+    free(vec); // R - Vector (1)
     free(enemy); // R - Enemy (1)
 }
 
 void destroyEnemies() {
-    LNode* node = enemies->head;
+    const LNode* node = enemies->head;
     while (node) {
         Enemy* enemy = (Enemy*) node->address;
-        free(enemy->physics->pos); // R - Enemy (1)
-        free(enemy->physics); // R - PhysicsObject (1)
-        free(enemy->sprite); // R - AnimatedSprite (1)
+        Vector2* vec = enemy->physics->pos;
+        unregisterPhysicsObject(enemy->physics); // R - PhysicsObject (1)
+        destroyAnimatedSprite(enemy->sprite); // R - AnimatedSprite (1)
+        free(vec); // R - Vector (1)
         free(enemy); // R - Enemy (1)
         node = node->next;
     }
     destroyList(enemies);
+    destroyAnimation(aniEnemy);
+    UnloadTexture(t);
 }

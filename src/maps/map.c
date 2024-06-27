@@ -179,3 +179,7 @@ void RenderTmxMapToFramebuf(const char *mapFileName, RenderTexture2D *buf)
 
     tmx_map_free(mapTmx);
 }
+
+// void mapCollide() {
+//     CheckCollisionRecs();
+// }
